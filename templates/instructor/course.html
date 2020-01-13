@@ -2,63 +2,34 @@
 
 {% block content %}
 
-<div class="content-section">
-    <h1> Course Schedule</h1>
-</div>
 
-<div class="content-section">
+<div id="vue-app">
+ 
 
+<div class="content-section" v-for="(week, key ) in course">
+    <h1> Week [[ key ]] </h1>
 
-{% for source in course %}  
-{% if source.week < 10 %}  
-{% else %}
-<div style="overflow-x:auto;">
+    <template v-for="(val, name) in week">   
+    <div v-bind:style="style(name)">
+       <p>  [[ name ]]: [[val]] <p>
+    </div>
+    
+    </template>   
+    <br> 
 
-
-    <table class="table table-sm">
-      <thead>
-          <tr>
-            <th scope="col" style="width:">Week {{source.week}} - {{source.date.strftime('%B %d')}}</th>
-          </tr>
-      </thead>
-      <thead>
-          <tr>
-            <th scope="col" style="width:">Unit {{source.unit}}: {{source.topic}} </th>
-          </tr>
-      </thead>
-            
-      <tbody>
-        <tr>
-            <td> <font color="{{titleColor}}">Goals:</font> </td>      
-        </tr>
-        <tr>
-            <td> {{source.goalOne}} </td>      
-        </tr>
-        <tr>
-            <td> {{source.goalTwo}} </td>      
-        </tr>
-        <tr>
-            <td> <font color="{{titleColor}}">Activity:</font> {{source.activity}} </td>  
-        </tr>
-        <tr>
-            <td> <font color="{{titleColor}}">Resources: {% if source.linkOne == '-'%} - {% else %} <a href="{{source.linkOne}}">DownLoad/Print</a> {% endif %} </font></td>  
-        </tr>
-
-      </tbody>
-    </table> 
-
-<br>
-{% endif %}
+</div>  
 
 
-{% endfor %}
-      
-</div>      
+</div> <!-- end of Vue app -->
+
 
 
 {% endblock %}
 
 
+
+
 {% block script %}   
-  
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script type="text/javascript" src="{{url_for('static', filename= 'js/course.js')}}"></script>  
 {% endblock %} 

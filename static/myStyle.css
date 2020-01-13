@@ -1,0 +1,77 @@
+
+textarea:focus {
+    outline: none !important;
+}
+
+
+
+
+.input1 {
+    background-color : rgb(53, 12, 12); 
+    border: 0 none white ;
+    color: tomato;
+    font-size: 20px;  
+    border-radius: 15px;
+    padding: 10px;
+    height: 60px !important;
+    width: 70%
+}
+
+.input2 {
+    background-color : darkslateblue; 
+    border: 0 none white;
+    color: snow;
+    font-size: 20px;
+    border-radius: 5px;  
+    padding: 10px;
+    height: 80px !important;
+    width: 100%
+}
+
+.input3 {
+    background-color : rgb(9, 40, 97);  
+    border: 0 none white;
+    color: azure;
+    padding: 10px;
+    font-size: 20px;  
+    border-radius: 15px;
+    height: 60px !important;
+    width: 70%
+}
+
+.input4 {
+    background-color : rgb(9, 40, 97);  
+    border: 0 none white;
+    color: azure;
+    padding: 10px;
+    font-size: 20px;  
+    border-radius: 15px;
+    height: 150px !important;
+    width: 70%
+}
+
+
+.plan-section {
+    background: slategray;
+    padding: 10px 20px;
+    border: 0px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 600px
+  }
+
+.list-section {
+    background: slategray;
+    padding: 10px 20px;
+    border: 0px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;   
+  }
+
+.frame-section {
+    background: slategray;
+    padding: 0px 0px;
+    border: 5px solid #47072a;
+    border-radius: 5px;
+    margin-bottom: 20px;   
+  }
