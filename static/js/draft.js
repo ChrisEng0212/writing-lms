@@ -1,0 +1,223 @@
+
+let unit_number = document.getElementById('unit').innerHTML
+console.log(unit_number)
+
+$.ajax({    
+    type : 'POST',
+    url : '/jCheck/work/' + unit_number
+   
+})
+.done(function(data) {            
+    if (data.work !='None') {  
+        let whole_obj = JSON.parse(data.work)        
+        let meta = whole_obj['meta']
+        let plan = whole_obj['plan']
+        var draft = whole_obj['draft'] 
+        if (typeof(draft) == "undefined"){
+            var draft = {
+            "Intro" : "",
+            "Part_1": "", 
+            "Part_2": "", 
+            "Part_3": "", 
+            "Closing": "",            
+            }
+        } 
+        let sources = JSON.parse(data.sources)                
+        console.log('META: ', meta)
+        
+        let newPlan = {
+            0 : [plan['Topic'], plan['Thesis']],
+            1 : [plan['Idea_1'], plan['Details_1']], 
+            2 : [plan['Idea_2'], plan['Details_2']], 
+            3 : [plan['Idea_3'], plan['Details_3']],
+            4 : ["", ""]
+        }
+        console.log('PLAN: ', newPlan)
+        console.log('DRAFT: ', draft)        
+        startVue(newPlan, meta, draft, sources)
+    }
+    else{
+        console.log('No data')
+        alert('You must complete your plan before you can start the writing')        
+    }
+});
+
+
+function sendData(draft, stage){
+    console.log(draft, stage)
+    $.ajax({    
+        type : 'POST',
+        data : {
+            unit : document.getElementById('unit').innerHTML, 
+            obj : JSON.stringify(draft),
+            stage : stage,
+            work : 'draft'
+        },
+        url : '/sendData',    
+    })
+    .done(function(data) {              
+        if (data) {                
+            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+            window.open(window.location.hostname + 'work/topic/' + unit_number,"_self")  
+        }
+    });
+}
+
+
+function startVue(plan, meta, draft, sources){ 
+    let app = new Vue({   
+
+    el: '#vue-app',
+    delimiters: ['[[', ']]'],  
+    mounted: function(){        
+        this.deSelect('Intro', '0')
+        this.deSelect('Part_1', '1') 
+        this.deSelect('Part_2', '2') 
+        this.deSelect('Part_3', '3') 
+        this.deSelect('Closing', '4') 
+    },
+    data: {
+        planOBJ : plan,
+        metaOBJ : meta, 
+        draftOBJ : draft, 
+        srcOBJ : sources, 
+        theme : { 'color' : meta['theme'] },
+        control : {
+            0 : [], 
+            1 : [], 
+            2 : [], 
+            3 : [], 
+            4 : []
+            }, 
+        btn_control : {
+            'very' : false, 
+            'also' : false, 
+            'let'  : false, 
+            'no matter' : false, 
+            'there' : false, 
+            'commas' : false, 
+            'words' : false
+        },
+        slides : {
+            'very' : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
+            'also' : "https://docs.google.com/presentation/d/e/2PACX-1vSaRz0wI_qa8iyIujCJjtEC_M_gJZa7Fw0OLLJbW2_QoQ_yOrezSvn-bvid1m-gR6n1baN1UAptFRFZ/embed", 
+            'let'  : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+            'no matter' : "https://docs.google.com/presentation/d/e/2PACX-1vQtQUX1hrwY1RwYr229bQcvYgMBOMrfat87pGfWEzxDreQjsBpuCf4rSXokvKehDuE7hNGCloqi2yM9/embed", 
+            'there' : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
+            'commas' : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
+            'words' : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed"
+        }
+
+    }, 
+    methods: {
+        selectText: function(id){
+            console.log(id)            
+            document.getElementById(id).setAttribute('class', 'input2')          
+        },
+        deSelect: function(id, idx){       
+            let string = (this.$refs[id])[0].value            
+            console.log(this.draftOBJ)
+            this.draftOBJ[id] = string
+            
+
+            if (string.length > 0 ) { 
+                let textBox = document.getElementById(id)
+                console.log('Height', textBox.scrollHeight)
+                textBox.setAttribute('class', 'input3') 
+                textBox.setAttribute('style', 'height:' + textBox.scrollHeight +'px !important')
+            }
+            else { 
+                document.getElementById(id).setAttribute('class', 'input1') 
+            }  
+
+            /// text checking and feedback
+            this.control[idx] = []
+
+
+            if (
+                string.indexOf('very like') >= 0 || 
+                string.indexOf('very appreciate') >= 0 ||
+                string.indexOf('very hate') >= 0 ||
+                string.indexOf('very enjoy') >= 0 ||
+                string.indexOf('very love') >= 0 
+                ){      
+                this.control[idx].push('very')
+            }           
+            
+            // take all white space from text            
+            console.log(string.replace(/\s\s/g, " "));
+            new_string = string.replace(/\s\s/g, " ")
+
+            var feedback = [
+                ['very' ,  /very like/i],
+                ['very' ,  /very enjoy/i],
+                ['very' ,  /very love/i],
+                ['very' ,  /very hate/i],
+                ['very' ,  /very appreciate/i], 
+
+                ['there' ,  /there have/i],
+                ['there' ,  /there has/i],
+                ['there' ,  /there had/i],
+
+                ['also' ,  /also can/i],
+                ['also' ,  /also is/i],
+                ['also' ,  /also will/i],
+                ['also' ,  /also am/i],
+                ['also' ,  /also are/i], 
+
+                ['no matter' ,  /no matter/i],
+                ['let' ,  /let/i],                              
+            ]
+            
+            for (var fb in feedback) {
+                if (new_string.match(feedback[fb][1])){
+                    this.control[idx].push(feedback[fb][0])
+                }                      
+            }    
+            
+            var commaCheck = string.split(',')
+            var commas = commaCheck.length
+            var periodCheck = string.split('.')
+            var periods = periodCheck.length
+            if (commas > periods * 1.8 ) {      
+                this.control[idx].push('commas')
+            }  
+            
+            var wordCheck = string.split(' ')
+            var words = wordCheck.length
+            if (string.indexOf('Part') >= 0 && words < 20) {
+                this.control[idx].push('word_count')
+            }
+
+            console.log(this.control)
+        },
+        controller: function(item){
+            for (btn in this.btn_control){
+                if (btn == item){
+                   this.btn_control[item] = !this.btn_control[item]  
+                }
+                else {
+                    this.btn_control[btn] = false
+                }                
+            }           
+            console.log(this.btn_control[item])
+        },
+        readRefs: function(){            
+            for(var key in this.draftOBJ) {
+                if (this.draftOBJ[key] == ''){
+                    alert('Warning! ' + key + ' is not complete yet - but you can fix it later' ) 
+                    status = 1                  
+                } 
+                else{
+                    status = 2
+                } 
+            }
+            
+            sendData(this.draftOBJ, status)            
+                     
+        }       
+    }
+    
+})// end NEW VUE
+
+}// end start vue function

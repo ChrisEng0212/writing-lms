@@ -46,7 +46,7 @@ class User(db.Model, UserMixin): #import the model
     image_file = db.Column(db.String(), nullable=False, default='profiles/avatar1.PNG') #images will be hashed to 20 and images could be the same
     password = db.Column(db.String(60), nullable=False)    
     device = db.Column (db.String(), nullable=False)        
-    theme = db.Column (db.String(20))
+    theme = db.Column (db.String(20), default='ghostwhite')
     extraStr = db.Column(db.String)
     extraInt = db.Column(db.Integer)
 

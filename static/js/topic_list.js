@@ -1,12 +1,12 @@
 
 $.ajax({    
     type : 'POST',
-    url : '/topicCheck',    
+    url : '/jCheck/sources/0',    
 })
 .done(function(data) { 
          
     if (data) {                
-        topics = JSON.parse(data.topics)
+        topics = JSON.parse(data.sources)         
         console.log(topics)         
         startVue(topics)
     }

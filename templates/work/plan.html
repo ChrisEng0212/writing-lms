@@ -4,21 +4,32 @@
 
 <div id="vue-app"> 
 
-    <div class="plan-section">
+    <div class="list-section">
         <h1 style="display:inline"> Writing Plan </h1> 
-        <h1 id="unit" style="display:inline"> {{unit}} </h1>
+        <h1 id="unit" style="display:inline">{{unit}}</h1>
         <br><br>
         <div class="frame-section embed-responsive embed-responsive-4by3">
-            <iframe id="questions_embed" src="{{slides}}"
+            <iframe id="questions_embed" :src="slides"
             allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
 	        </iframe>
         </div> 
 
-        <div v-for="(input, key) in inputObj"> 
+        <div v-for="(input, key, index) in planOBJ"> 
 
             <legend class="border-bottom" style="color:white">[[ key ]]</legend>             
-                <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key)" v-model="input"></textarea>
-                <textarea v-else  class="input1" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key)" v-model="input"></textarea> 
+                <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input"></textarea>
+                <textarea v-else  class="input1" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input"></textarea> 
+                <br>
+
+                <div v-if="control[index]" >
+                <span  v-if="control[index] == 'None'" style="color:tomato"> (Please use commas ',' to seperate your details)</span>
+                <span  v-else style="color:lightcyan"> [[ control[index] ]] </span>
+                <br>
+                </div>
+                
+
+                
+                
             <br>
         
             </div> 

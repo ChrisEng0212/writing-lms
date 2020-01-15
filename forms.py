@@ -90,7 +90,7 @@ class UpdateAccountForm(FlaskForm):
     #username = StringField ('Username', validators=[DataRequired(), Length(min=2, max=20)])    
     email = StringField('Email', validators=[DataRequired(), Email()] )   
     picture = FileField ('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) 
-    theme = RadioField('Personal Theme (you can change later)', choices = [('Blue', 'Blue'), ('Red', 'Red'), ('Green', 'Green'), ('Orange', 'Orange'), ('Purple', 'Purple')]) 
+    theme = RadioField('Personal Theme', choices = [('aqua', 'Blue' ), ('springgreen', 'Green' ), ('Orange', 'Orange'), ('violet', 'Pink' )]) 
     avatar = StringField('Pen Name (used for writing)', validators=[DataRequired()] )   
     submit = SubmitField('Update')
 

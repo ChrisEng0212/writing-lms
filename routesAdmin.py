@@ -160,14 +160,17 @@ def account():
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = upload_picture(form.picture.data) 
-            current_user.image_file = picture_file                   
-        current_user.email = form.email.data        
+            current_user.image_file = picture_file                              
+        current_user.email = form.email.data 
+        current_user.avatar=form.avatar.data, 
+        current_user.theme=form.theme.data       
         db.session.commit() 
         flash('Your account has been updated', 'success')
         return redirect (url_for('account')) # so the get request will superceed another post request????
     elif request.method == 'GET':
         #form.username.data = current_user.username - taken out of form requirements
         form.email.data = current_user.email
+        form.avatar.data = current_user.avatar        
     # https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7    
     image_file = S3_LOCATION + current_user.image_file   
     

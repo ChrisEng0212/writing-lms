@@ -4,67 +4,87 @@ console.log(unit_number)
 
 $.ajax({    
     type : 'POST',
-    url : '/jCheck/plan/' + unit_number
+    url : '/jCheck/work/' + unit_number
    
 })
 .done(function(data) {            
-    if (data.data !='None') {                
-        console.log(data.data)
-        startVue(JSON.parse(data.data))
+    if (data.work != 'None') {  
+        let whole_obj = JSON.parse(data.work)
+        //let meta = whole_obj['meta']
+        let plan = whole_obj['plan'] 
+        let sources = JSON.parse(data.sources)
+        let slides = sources[unit_number]['Materials']           
+        //console.log('META: ', meta)
+        console.log('PLAN: ', plan)
+        console.log('SLIDES: ', slides)
+        startVue(plan, slides)
     }
     else{
         console.log('No data')
-        let inputObj = {
-            'Topic' : 'nuts, sacks',
-            'Thesis': 'nuts, balls', 
-            'Idea-1': 'nuts, balls', 
-            'Details-1': 'nuts, balls', 
-            'Idea-2': 'nuts, balls', 
-            'Details-2': 'nuts, balls', 
-            'Idea-3': 'nuts, balls', 
-            'Details-3': 'nuts, balls', 
+        let plan = {
+            "Topic" : "",
+            "Thesis": "", 
+            "Idea_1": "", 
+            "Details_1": "", 
+            "Idea_2": "", 
+            "Details_2": "", 
+            "Idea_3": "", 
+            "Details_3": "", 
         }
-        startVue(inputObj)
+        let sources = JSON.parse(data.sources)
+        let slides = sources[unit_number]['Materials'] 
+        console.log('PLAN: ', plan)
+        console.log('SLIDES: ', slides)       
+        startVue(plan, slides)
     }
 });
 
 
-function sendData(obj){
-    console.log(obj)
+function sendData(plan, stage){
+    console.log(plan, stage)
     $.ajax({    
         type : 'POST',
         data : {
             unit : document.getElementById('unit').innerHTML, 
-            obj : JSON.stringify(obj),
-            stage : '1'
+            obj : JSON.stringify(plan),
+            stage : stage,
+            work : 'plan'           
         },
         url : '/sendData',    
     })
     .done(function(data) {              
         if (data) {                
-            alert('Thank you ' + data.name + ', your plan has been saved')
+            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+            window.open(window.location.hostname + 'work/topic/' + unit_number,"_self")           
         }
     });
 }
 
 
-function startVue(inputObj){ new Vue({   
+function startVue(plan, slides){ new Vue({   
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],  
     data: {
-        inputObj : inputObj                    
+        planOBJ : plan,        
+        slides : slides,          
+        control : {}
     }, 
+
     methods: {
         selectText: function(id){
-            console.log(id)            
+            console.log(id)   
+                     
             document.getElementById(id).setAttribute('class', 'input2')          
         },
-        deSelect: function(id){
+        deSelect: function(id, idx){
             //When ref is used together with v-for, the ref you get will be an array containing the child components mirroring the data source. THEREFORE ADD [0]
             //When using a variable with Refs use '[variable]' instead of .RefNAME
-            console.log(this.inputObj)
+            console.log(this.planOBJ)            
             let string = (this.$refs[id])[0].value
+            // but this should be done automatically with v-model???????????????????????????
+            this.planOBJ[id] = string
+
             if (string.length > 0 ) { 
                 let textBox = document.getElementById(id)
                 console.log('Height', textBox.scrollHeight)
@@ -79,22 +99,35 @@ function startVue(inputObj){ new Vue({
             console.log(id.indexOf('Det'))
             if ( id.indexOf('Det') == 0 ) {
                 var ideasList = string.split(',')
-                
+                console.log('DETAILS ' + ideasList, typeof(ideasList))
                 if (ideasList.length > 1 ){
                     //alert ('You have listed ' + (ideasList.length) + ' details' )
                     document.getElementById(id).setAttribute('class', 'input3')
+                    console.log(idx, typeof(idx))
+                    this.control[idx] = ideasList.length 
+                    console.log(this.control)
                 }
                 else {
-                    alert ('WARNING: no details found. Please use " , " to seperate you details')
+                    //alert ('WARNING: no details found. Please use " , " to seperate you details')
                     document.getElementById(id).setAttribute('class', 'input1')
+                    /*let parent = document.getElementById(id +'x')                   
+                    var anc = document.createElement("span");        
+                    anc.setAttribute('style' , "color:red" );           
+                    anc.innerHTML = 'CHECK SCORE'
+                    parent.appendChild(anc)*/ 
+                    console.log(idx, typeof(idx))
+                    this.control[idx] = 'None'
+                    console.log(this.control)
                 }
 
             }
         },
         readRefs: function(){
-            for(var key in inputObj) {
+            var stage = 1
+            console.log(this.planOBJ)
+            for(var key in this.planOBJ) {
                 if ( key.indexOf('Det') == 0 ) {
-                    var detailsValue = inputObj[key]
+                    var detailsValue = this.planOBJ[key]
                     if (Array.isArray(detailsValue)) {
                         console.log('ARRAY ' + detailsValue)
                     }
@@ -111,13 +144,13 @@ function startVue(inputObj){ new Vue({
                     } 
                                 
                 }
-                else if (inputObj[key] == ''){
-                    alert('Warning! ' + key + ' is not complete yet' )
-                    return false
+                else if (this.planOBJ[key] == ''){
+                    alert('Warning! ' + key + ' is not complete yet, please comeback to finish it soon' )  
+                    stage = 0                 
                 }  
             }
             
-            sendData(inputObj)            
+            sendData(this.planOBJ, stage)            
                      
         }       
     }
