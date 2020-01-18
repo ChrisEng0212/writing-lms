@@ -2,12 +2,17 @@
 
 {% block content %}
 
-<div id="vue-app"> 
+<div id="vue-app">    
 
     <div class="list-section">
         <h1 style="display:inline"> Writing Plan </h1> 
         <h1 id="unit" style="display:inline">{{unit}}</h1>
-        <br><br>
+        <br>
+        <br>
+        <button type="button" class="btn btn-sm btn-outline-warning" style="background:dimgray; width:100%" v-on:click="backTo()"> BACK TO TOPIC </button>  
+        <br>
+        <br>   
+        
         <div class="frame-section embed-responsive embed-responsive-4by3">
             <iframe id="questions_embed" :src="slides"
             allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
@@ -16,28 +21,27 @@
 
         <div v-for="(input, key, index) in planOBJ"> 
 
-            <legend class="border-bottom" style="color:white">[[ key ]]</legend>             
+            <legend class="border-bottom" style="color:white">[[ key ]]</legend> 
+
                 <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input"></textarea>
                 <textarea v-else  class="input1" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input"></textarea> 
                 <br>
 
                 <div v-if="control[index]" >
-                <span  v-if="control[index] == 'None'" style="color:tomato"> (Please use commas ',' to seperate your details)</span>
-                <span  v-else style="color:lightcyan"> [[ control[index] ]] </span>
-                <br>
-                </div>
-                
-
-                
-                
-            <br>
+                    <span  v-if="control[index] == 'None'" style="color:tomato"> (Please use commas ',' to seperate your details)</span>
+                    <span  v-else style="color:lightcyan"> [[ control[index] ]] Details </span>
+                    <br>
+                </div>                  
+            
         
-            </div> 
-            <br>
-            <button class="btn btn-info" v-on:click="readRefs"> SAVE </button>   
+        </div> 
+        </div> 
 
-        </div>  
-
+        <div class="list-section" v-if="save">            
+            <button type="button" class="btn btn-outline-info" style="background:dimgray;color:cyan; width:48%" v-on:click="readRefs"> SAVE </button>  
+            <button type="button" class="btn btn-outline-danger" style="background:dimgray;color:tomato; width:48%"v-on:click="cancel"> CANCEL </button>  
+        </div> 
+    
 </div> <!-- end of Vue app -->
 
 

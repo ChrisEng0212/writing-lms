@@ -2,32 +2,34 @@
 
 {% block content %}
 
+<span id="topics" style="display:none">{{topJS}}</span>
+
 <div id="vue-app"> 
 
 <div class="list-section">    
-    <legend class="border-bottom mb-4">Topic List</legend>    
+    <legend class="border-bottom mb-4">Topic List</legend>   
     
-    <table class="table table-sm">
+    <table class="table table-sm" style="color:white">
         <thead>
             <tr>
-              <th scope="col" style="">Topic</th>
-              <th scope="col" style="">Title</th>
-              <th scope="col" style="">Deadline</th>           
-              <th scope="col" style="">Status</th>
-              <th scope="col" style=""></th>
+              <th scope="col" style="">Topic/ <br> Deadline</th>
+              <th scope="col" style="">Title/ <br> Progress</th>              
             </tr>
         </thead>
 
     <div>      
     
         <tbody>
-            <tr v-for="(topic, key) in topics"  :key="key">
-              <td> [[key]] </td> 
-              <td> [[topic.Title]]</td>   
-              <td> [[topic.Date]]</td>            
-              <td> [[topic.Set]]</td>
-              <td> <button class="btn btn-outline-info" ><a v-bind:id="key" style="color:white" :href="'topic/' + key">OPEN</a> </button></td>
-            </tr>       
+            <template v-for="(topic, key) in topOBJ"  :key="key" > 
+            <tr @click="goTo(key)">
+              <td> [[  key  ]] </td> 
+              <td> [[  topic['Title']  ]] </td>     
+            </tr>  
+            <tr>
+              <td> [[  topic['Deadline']  ]] </td>  
+              <td> <div :style="barStyle(topic['Theme'], topic['Stage'])"></div> [[  topic['Stage']  ]] </td>  
+              </tr>  
+            </template>     
         </tbody>
  
     </div id="end vue for">   

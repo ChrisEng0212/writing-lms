@@ -6,12 +6,12 @@
 <div id="vue-app">
  
 
-<div class="content-section" v-for="(week, key ) in course">
+<div class="list-section" v-for="(week, key ) in course">
     <h1> Week [[ key ]] </h1>
 
     <template v-for="(val, name) in week">   
     <div v-bind:style="style(name)">
-       <p>  [[ name ]]: [[val]] <p>
+       <span>  [[ name ]]: [[val]] </span>
     </div>
     
     </template>   

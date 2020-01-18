@@ -91,7 +91,7 @@ class UpdateAccountForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()] )   
     picture = FileField ('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) 
     theme = RadioField('Personal Theme', choices = [('aqua', 'Blue' ), ('springgreen', 'Green' ), ('Orange', 'Orange'), ('violet', 'Pink' )]) 
-    avatar = StringField('Pen Name (used for writing)', validators=[DataRequired()] )   
+    avatar = StringField('Pen Name (used for writing)', validators=[DataRequired(), Length(20)] )   
     submit = SubmitField('Update')
 
     def validate_username(self, avatar):  # the field is username

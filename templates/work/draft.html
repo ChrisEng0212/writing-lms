@@ -7,12 +7,11 @@
     <div class="list-section">
         <h1 style="display:inline"> First Draft </h1> 
         <h1 id="unit" style="display:inline">{{unit}}</h1>
-        <br><br>
-        
+        <br><br>        
         
         <div v-for="(input, key, index) in draftOBJ"> 
 
-            <legend>[[ key ]]</legend> 
+            <legend>[[ key ]] <span style="color:cyan;font-size:10px" @click="helpButton(key)"> help? </span></legend>  
 
             <div v-if="planOBJ[index][0].length > 0">
                 <span :style="theme" > [[ planOBJ[index][0] ]]  </span>  
@@ -21,10 +20,10 @@
 
             <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input" ></textarea>
             <textarea v-else  class="input1" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input" placeholder="...."></textarea> 
-            
-            <div v-if="control[index]" >
+            <br>            
+            <div v-if="control[index]" style="display:inline">
                 <template v-for="item in control[index]">
-                    <button type="button" class="btn btn-sm btn-outline-warning" style="margin-right: 5px" v-on:click="controller(item)">"[[item]]" tips</button>  
+                    <button type="button" class="btn btn-sm btn-outline-warning" style="margin-right: 5px" @click="controller(item)">"[[item]]" tips</button>  
                 </template>
                 <template v-for="item in control[index]">                    
                    <div v-if="btn_control[item]">                    
@@ -36,13 +35,21 @@
                     </div>                    
                 </template>
             </div> 
-        
+            
+                                   
+                <div v-if="helper[key]">            
+                    <iframe :src="slides[key]"
+                        allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+                    </iframe>                             
+                </div>  
+            <br>
         </div> 
+    </div>  
 
-        <br>
-        <button class="btn btn-info" v-on:click="readRefs"> SAVE </button>   
-
-        </div>  
+    <div class="list-section" v-if="save">            
+        <button type="button" class="btn btn-outline-info" style="background:dimgray;color:cyan; width:45%" v-on:click="readRefs"> SAVE </button>  
+        <button type="button" class="btn btn-outline-danger" style="background:dimgray;color:tomato; width:45%"v-on:click="cancel"> CANCEL </button>  
+    </div>  
 
 </div> <!-- end of Vue app -->
 

@@ -1,28 +1,5 @@
 
 
-.card {
-  background: white;  
-  border: none;
-  border-radius: 0px;
-  margin-bottom: 0px;
-}
-
-.card-header {
-  background: white;  
-  border: none;
-  border-radius: 0px;
-  margin-bottom: 0px;
-  padding: 5px 20px;
-}
-
-.card-body {
-  background: white;  
-  border: none;
-  border-radius: 0px;
-  margin-bottom: 0px;
-  padding: 20px 20px;
-}
-
 audio { 
     width: 250px; 
     display: block; 
@@ -33,9 +10,9 @@ body {
     margin-top: 5rem;
   }
 
-  span {
-    color: ghostwhite;
-  }
+span {
+  color: ghostwhite;
+}
   
   h1, h2, h3, h4, h5, h6 {
     color: whitesmoke;
@@ -151,10 +128,6 @@ body {
 .btn-audio {
   width: 100px;  
 }
-
-
-
-
 
 table {
   width: 100%;

@@ -16,15 +16,46 @@
 	          </iframe>
         </div> 
     
-    <div align="center">
-    <button type="button" class="btn btn-outline-light " style="width:30%"> PLAN </button>
-    <button type="button" class="btn btn-outline-light " style="width:30%"> WORK </button>
-    <button type="button" class="btn btn-outline-light " style="width:30%"> REVISE </button>
-    </div>
+      <div align="center">
+      <template v-for="(toggle, key) in buttons" align="center">
+      
+      <button v-if="toggle" type="button" class="btn btn-outline-light" style="width:24%;margin-left:1px" @click="goTo(key)"> [[ key ]]</button>
+      <button v-else type="button" class="btn btn-outline-light" style="width:24%; color:tomato;margin-left:1px"> [[ key ]]</button>
 
+      </template>
+      </div> 
     <br>
 
-    <legend class="border-bottom" style="color:white">Plans</legend>   
+    <legend class="border-bottom" style="color:white">Plans</legend>     
+
+    <div v-for="plan in plans">
+    
+      <img class="rounded-circle chat-img" style="" :src="plan['meta']['image']"> 
+      <span class="avatar" :style="color(plan['meta']['theme'])"> [[  plan['meta']['avatar']  ]] </span>
+      <br>
+          <template v-for="(item, key) in plan['plan']">    
+            <span class="pspan" :style="color(plan['meta']['theme'])"> [[ key ]]: </span>
+            <span class="pspan" > [[  item  ]] </span>  
+            <br>  
+          </template>     
+      <br>
+    </div>
+
+    <legend class="border-bottom" style="color:white">Drafts</legend> 
+
+    <div v-for="draft in drafts">
+    
+      <img class="rounded-circle chat-img" style="" :src="draft['meta']['image']"> 
+      <span class="avatar" :style="color(draft['meta']['theme'])"> [[  draft['meta']['avatar']  ]] </span>
+      <br>
+          <template v-for="(item, key) in draft['draft']">    
+            <span class="pspan" :style="color(draft['meta']['theme'])"> [[ key ]]: </span>
+            <span class="pspan" > [[  item  ]] </span>  
+            <br>  
+          </template>     
+      <br> 
+    </div>
+    
      
 
 </div> <!-- end of Vue app -->

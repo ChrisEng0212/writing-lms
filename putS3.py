@@ -34,7 +34,7 @@ def putJson(file, course):
 
 
 course = 1
-file = 1
+file = 2
  
 result = putJson(file, course)
 print('json put in', result )

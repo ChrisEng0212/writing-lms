@@ -1,4 +1,4 @@
-import sys, boto3, random, base64, os, secrets, httplib2, json, ast
+import sys, boto3, random, base64, os, secrets, httplib2, json, ast, datetime
 from sqlalchemy import asc, desc 
 from datetime import datetime, timedelta
 from flask import render_template, url_for, flash, redirect, request, abort, jsonify  
@@ -40,8 +40,8 @@ def students():
 @login_required
 def att_team():
 
-    legend = 'Attendance: ' + time.strftime('%A %b, %d %Y %H:%M')
-
+    #legend = 'Attendance: ' + time.strftime('%A %b, %d %Y %H:%M')
+    legend = 'None'
     # check if attendance is open 
     openData = Attendance.query.filter_by(username='Chris').first()
     if openData:

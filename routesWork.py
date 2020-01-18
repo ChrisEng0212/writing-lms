@@ -80,14 +80,48 @@ def jChecker(check, unit):
     return jsonify({'work' : work, 'sources' : sources})
 
 
+def processRecord(unit, stage):
+    ## make student_record
+    record = jRecord.query.filter_by(username=current_user.username).first()  
+    if record:
+        student_record = ast.literal_eval(record.Midterm)
+        print('1')
+    else:
+        student_record = {}
+        start_record = jRecord(username=current_user.username, Midterm=str(student_record))
+        db.session.add(start_record)
+        record = jRecord.query.filter_by(username=current_user.username).first()  
+        print('2')
+    
+    ### how to keep stage record?
+    try: 
+        if student_record[unit]['stage'] == stage:
+            pass
+        else: 
+            student_record[unit]['stage'] = stage 
+        print('3')
+    except:
+        student_record[unit] = {}
+        student_record[unit]['stage'] = stage  
+        print('4')
+
+    record.Midterm = str(student_record)
+    db.session.commit()
+
+        
+
+
 @app.route('/sendData', methods=['POST'])
 def sendData():  
     unit = request.form ['unit']  
-    stage = request.form ['stage'] 
+    stage = request.form ['stage']
+    date = 'date variable not set' #request.form ['date']  
     obj = request.form ['obj'] 
     work = request.form ['work'] 
     name = current_user.username
-    user = User.query.filter_by(username=name).first()  
+    user = User.query.filter_by(username=name).first() 
+    processRecord(unit, stage) 
+    
     
     dataDict = ast.literal_eval(obj) 
     userDict = {}
@@ -97,6 +131,7 @@ def sendData():
         userDict['meta'] = {
                 'name' : name, 
                 'unit' : unit,
+                'date' : date,
                 'avatar' : user.avatar, 
                 'image' : S3_LOCATION + user.image_file, 
                 'theme' : user.theme,
@@ -118,11 +153,40 @@ def sendData():
 
 """ ### TOPICS ### """
 
+
 @app.route("/topic_list", methods = ['GET', 'POST'])
 @login_required
-def topic_list():       
+def topic_list():
+    topDict = {}
 
-    return render_template('work/topic_list.html')
+    SOURCES = loadAWS('json_files/sources.json', 0)
+    sources = SOURCES['sources']
+    for unit in sources:
+        src = sources[unit]       
+        if src['Set'] == 1:
+            ## add to topics list
+            topDict[unit] = {
+                'Title' : src['Title'], 
+                'Deadline' : src['Deadline']
+            }
+            ## add meta details if available
+            file = current_user.username + '.json'
+            obj = loadAWS(file, int(unit)) 
+            print('obj', obj)
+            if obj:
+                topDict[unit]['Theme'] = obj['meta']['theme']       
+                topDict[unit]['Stage'] = int(obj['meta']['stage'])       
+                topDict[unit]['Avatar'] = obj['meta']['avatar']      
+                  
+            else: 
+                topDict[unit]['Theme'] = 'white'      
+                topDict[unit]['Stage'] = 0      
+                topDict[unit]['Avatar'] = 'none'
+                
+    print('DICT', topDict)
+    topJS = json.dumps(topDict)  
+
+    return render_template('work/topic_list.html', topJS=topJS)
 
 @app.route('/topicCheck/<string:unit>', methods=['POST'])
 def topicCheck(unit):
@@ -134,27 +198,27 @@ def topicCheck(unit):
     print(objs)    
     for item in objs:
         jload = loadAWS(item.key, 0)  
-        print('TEST', item.key, jload)
+        print('TEST', item.key)
         if jload: # becasue None would be the folder search '1/'
             if jload['meta']['name'] == current_user.username:
-                print('CURRENT USER FOUND')
+                
                 stage = jload['meta']['stage']
-            
+                print('CURRENT USER FOUND', stage)
+            else:
+                dataList.append(  json.dumps(jload) )              
             
             if int(jload['meta']['stage']) > 0:
                 print('PLAN FINISHED')
             if int(jload['meta']['stage']) > 1:
-                print('WORK FINISHED')  
-            
-            dataList.append(json.dumps(jload) )        
-    
+                print('WORK FINISHED')   
+
     random.shuffle(dataList)      
 
     SOURCES = loadAWS('json_files/sources.json', 0)
     sources = json.dumps(SOURCES['sources'])    
 
     #print('DATA', type(dataList), dataList)
-    return jsonify({'dataList' : dataList, 'sources' : sources})
+    return jsonify({'dataList' : dataList, 'sources' : sources, 'stage' : stage})
 
 
 
@@ -167,50 +231,6 @@ def topicCheck(unit):
 def part(part, unit):  
     
     return render_template('work/' + part + '.html', unit=unit)
-
-"""   
-@app.route("/plan/<string:unit>", methods = ['GET', 'POST'])
-@login_required
-def plan(unit):  
-    
-    return render_template('work/plan.html', unit=unit)
-
-@app.route("/work/<string:unit>", methods = ['GET', 'POST'])
-@login_required
-def work(unit):  
-    
-    return render_template('work/work.html', unit=unit)
-
-@app.route("/revise/<string:unit>", methods = ['GET', 'POST'])
-@login_required
-def revise(unit):  
-
-    return render_template('work/work.html', unit=unit)
-
-@app.route("/publish/<string:unit>", methods = ['GET', 'POST'])
-@login_required
-def publish(unit):  
-    ### add a picture / recording / or handwriting 
-    return render_template('publish/work.html', unit=unit)
-
-
-@app.route('/audioUpload', methods=['POST', 'GET'])
-def audioUpload():
-
-    title = request.form ['title']
-    audio_string = request.form ['base64']    
-
-    if title and base64:         
-        audio = base64.b64decode(audio_string)
-        newTitle = S3_LOCATION + current_user.username + title + '.mp3'
-        filename = current_user.username + title + '.mp3'        
-        print(S3_BUCKET_NAME)
-        s3_resource.Bucket(S3_BUCKET_NAME).put_object(Key=filename, Body=audio)
-        return jsonify({'title' : newTitle})
-    
-    return jsonify ({'error' : 'no upload'})
-
-"""
 
 
 

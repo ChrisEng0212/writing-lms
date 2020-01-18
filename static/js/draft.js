@@ -58,7 +58,7 @@ function sendData(draft, stage){
     .done(function(data) {              
         if (data) {                
             alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
-            window.open(window.location.hostname + 'work/topic/' + unit_number,"_self")  
+            window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
         }
     });
 }
@@ -81,6 +81,7 @@ function startVue(plan, meta, draft, sources){
         metaOBJ : meta, 
         draftOBJ : draft, 
         srcOBJ : sources, 
+        save : false,
         theme : { 'color' : meta['theme'] },
         control : {
             0 : [], 
@@ -105,7 +106,19 @@ function startVue(plan, meta, draft, sources){
             'no matter' : "https://docs.google.com/presentation/d/e/2PACX-1vQtQUX1hrwY1RwYr229bQcvYgMBOMrfat87pGfWEzxDreQjsBpuCf4rSXokvKehDuE7hNGCloqi2yM9/embed", 
             'there' : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
             'commas' : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
-            'words' : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed"
+            'words' : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+            Intro  : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true", 
+            Part_1 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
+            Part_2 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
+            Part_3 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
+            Closing : "https://docs.google.com/document/d/e/2PACX-1vR3N3BjlVCQvrzBH5zXsK64bIlJniW38G40h3ymgSNlCvHKbOFsIRoEBP9zEyrutvxEPGoMhjm8haFX/pub?embedded=true",  
+        },
+        helper : {
+            Intro : false, 
+            Part_1 : false, 
+            Part_2 : false, 
+            Part_3 : false, 
+            Closing : false
         }
 
     }, 
@@ -115,10 +128,15 @@ function startVue(plan, meta, draft, sources){
             document.getElementById(id).setAttribute('class', 'input2')          
         },
         deSelect: function(id, idx){       
-            let string = (this.$refs[id])[0].value            
-            console.log(this.draftOBJ)
-            this.draftOBJ[id] = string
-            
+            let string = (this.$refs[id])[0].value  
+            console.log('STRING', string, 'ID_INPUT', this.draftOBJ[id])
+            //check if change has been made before updating object
+            if (string != this.draftOBJ[id]){
+                this.save = true
+                this.draftOBJ[id] = string   
+                console.log('SAVE', string, this.draftOBJ );             
+            }
+                        
 
             if (string.length > 0 ) { 
                 let textBox = document.getElementById(id)
@@ -126,6 +144,7 @@ function startVue(plan, meta, draft, sources){
                 textBox.setAttribute('class', 'input3') 
                 textBox.setAttribute('style', 'height:' + textBox.scrollHeight +'px !important')
             }
+
             else { 
                 document.getElementById(id).setAttribute('class', 'input1') 
             }  
@@ -202,6 +221,19 @@ function startVue(plan, meta, draft, sources){
             }           
             console.log(this.btn_control[item])
         },
+        helpButton: function(key){
+            for (help in this.helper){
+                if (help == key){
+                   this.helper[help] = !this.helper[help]
+                   console.log(help, 'DONE'); 
+                }
+                else {
+                    this.helper[help] = false
+                    console.log(help, 'ALSO');
+                }                
+            }           
+            console.log(key, this.helper)
+        },
         readRefs: function(){            
             for(var key in this.draftOBJ) {
                 if (this.draftOBJ[key] == ''){
@@ -212,10 +244,13 @@ function startVue(plan, meta, draft, sources){
                     status = 2
                 } 
             }
-            
-            sendData(this.draftOBJ, status)            
-                     
-        }       
+            sendData(this.draftOBJ, status) 
+            alert('Please wait a moment while your writing is updating') 
+        }, 
+        cancel: function(){
+            alert('You have cancelled so your changes will not be saved')
+            window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
+        }      
     }
     
 })// end NEW VUE

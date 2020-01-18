@@ -74,18 +74,12 @@ class User(db.Model, UserMixin): #import the model
     
 ############### UNIT MODELS ###################################
 
-class jLibrary (db.Model):
+class jRecord (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     username = db.Column(db.String)    
-    Unit01 = db.Column(db.String)
-    Unit02 = db.Column(db.String)
-    Unit03 = db.Column(db.String)
-    Unit04 = db.Column(db.String)
-    Unit05 = db.Column(db.String) 
-    Unit06 = db.Column(db.String)
-    Unit07 = db.Column(db.String)
-    Unit08 = db.Column(db.String) 
+    Midterm = db.Column(db.String)
+    Final = db.Column(db.String)    
     extraStr = db.Column(db.String)
     extraInt = db.Column(db.Integer)
 
@@ -104,7 +98,7 @@ class aControl (db.Model):
 class MyModelView(ModelView):
     def is_accessible(self):
         if current_user.is_authenticated:
-            if current_user.id == 1:
+            if current_user.id > 0:
                 return True
             else:
                 return False
@@ -119,6 +113,6 @@ admin = Admin(app)
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Attendance, db.session))
 admin.add_view(MyModelView(AttendLog, db.session))
-admin.add_view(MyModelView(jLibrary, db.session))
+admin.add_view(MyModelView(jRecord, db.session))
 admin.add_view(MyModelView(aControl, db.session))
 
