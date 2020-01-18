@@ -14,8 +14,7 @@ function startVue(topOBJ){ new Vue({
         topOBJ: topOBJ                      
     }, 
     methods: {
-        barStyle: function(theme, stage){
-            theme = 'springgreen'
+        barStyle: function(theme, stage){            
             var stage_bar = {
                 0 : '5%', 
                 1 : '20%', 
