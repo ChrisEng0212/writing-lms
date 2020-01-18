@@ -21,8 +21,8 @@
     
         <tbody>
             <template v-for="(topic, key) in topOBJ"  :key="key" > 
-            <tr @click="goTo(key)">
-              <td> [[  key  ]] </td> 
+            <tr>
+              <td @click="goTo(key)"> <span style="background:slategray;border-radius:5px"> &emsp;&emsp;[[  key  ]]&emsp;&emsp; </span> </td> 
               <td> [[  topic['Title']  ]] </td>     
             </tr>  
             <tr>
