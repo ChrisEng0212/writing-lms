@@ -43,7 +43,7 @@ $.ajax({
 });
 
 
-function sendData(draft, stage){
+function sendData(draft, stage, count, date){
     console.log(draft, stage)
     $.ajax({    
         type : 'POST',
@@ -51,7 +51,10 @@ function sendData(draft, stage){
             unit : document.getElementById('unit').innerHTML, 
             obj : JSON.stringify(draft),
             stage : stage,
-            work : 'draft'
+            work : 'draft', 
+            count : count, 
+            date : date
+
         },
         url : '/sendData',    
     })
@@ -82,6 +85,7 @@ function startVue(plan, meta, draft, sources){
         draftOBJ : draft, 
         srcOBJ : sources, 
         save : false,
+        status : meta['status'],
         theme : { 'color' : meta['theme'] },
         control : {
             0 : [], 
@@ -91,22 +95,22 @@ function startVue(plan, meta, draft, sources){
             4 : []
             }, 
         btn_control : {
-            'very' : false, 
-            'also' : false, 
-            'let'  : false, 
+            very : false, 
+            also : false, 
+            let  : false, 
             'no matter' : false, 
-            'there' : false, 
-            'commas' : false, 
-            'words' : false
+            there : false, 
+            commas : false, 
+            words : false
         },
         slides : {
-            'very' : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
-            'also' : "https://docs.google.com/presentation/d/e/2PACX-1vSaRz0wI_qa8iyIujCJjtEC_M_gJZa7Fw0OLLJbW2_QoQ_yOrezSvn-bvid1m-gR6n1baN1UAptFRFZ/embed", 
-            'let'  : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+            very : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
+            also : "https://docs.google.com/presentation/d/e/2PACX-1vSaRz0wI_qa8iyIujCJjtEC_M_gJZa7Fw0OLLJbW2_QoQ_yOrezSvn-bvid1m-gR6n1baN1UAptFRFZ/embed", 
+            let  : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
             'no matter' : "https://docs.google.com/presentation/d/e/2PACX-1vQtQUX1hrwY1RwYr229bQcvYgMBOMrfat87pGfWEzxDreQjsBpuCf4rSXokvKehDuE7hNGCloqi2yM9/embed", 
-            'there' : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
-            'commas' : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
-            'words' : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+            there : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
+            commas : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
+            words : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
             Intro  : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true", 
             Part_1 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
             Part_2 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
@@ -234,18 +238,31 @@ function startVue(plan, meta, draft, sources){
             }           
             console.log(key, this.helper)
         },
-        readRefs: function(){            
+        readRefs: function(){ 
+            var count = 0            
             for(var key in this.draftOBJ) {
                 if (this.draftOBJ[key] == ''){
                     alert('Warning! ' + key + ' is not complete yet - but you can fix it later' ) 
-                    status = 1                  
+                    status = 1  
+                    date = 'none'                
                 } 
                 else{
-                    status = 2
+                    count += (this.draftOBJ[key].split(' ')).length
+                    if (status = 1) {
+                        status = 2
+                        //this will catch the first date of completed work
+                        date = 'update'
+                    }
+                    else {
+                        status = 2
+                        date = 'redo'
+                    }
+                    
+                    console.log('COUNT', count)
                 } 
             }
-            sendData(this.draftOBJ, status) 
-            alert('Please wait a moment while your writing is updating') 
+            sendData(this.draftOBJ, status, count, date) 
+            alert('Please wait a moment while your writing is being updated') 
         }, 
         cancel: function(){
             alert('You have cancelled so your changes will not be saved')

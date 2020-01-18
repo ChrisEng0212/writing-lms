@@ -37,6 +37,19 @@ textarea:focus {
     width: 100%
 }
 
+.unit-span {
+    cursor:pointer;
+    border-radius:5px; 
+    background: rgb(44, 52, 61);
+    
+    
+}
+
+.unit-span:hover {
+    cursor:pointer;
+    background:rgb(73, 115, 158);
+    
+}
 
 
 

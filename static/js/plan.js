@@ -2,7 +2,6 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-var date;
 
 $.ajax({    
     type : 'POST',
@@ -15,8 +14,7 @@ $.ajax({
         //let meta = whole_obj['meta']
         let plan = whole_obj['plan'] 
         let sources = JSON.parse(data.sources)
-        let slides = sources[unit_number]['Materials']
-        date = sources[unit_number]['Date']          
+        let slides = sources[unit_number]['Materials']                
         //console.log('META: ', meta)
         console.log('PLAN: ', plan)
         console.log('SLIDES: ', slides)
@@ -51,7 +49,7 @@ function sendData(plan, stage){
             unit : document.getElementById('unit').innerHTML, 
             obj : JSON.stringify(plan),
             stage : stage,
-            date : date,
+            date : 'plan', 
             work : 'plan'           
         },
         url : '/sendData',    

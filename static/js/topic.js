@@ -30,14 +30,14 @@ function startVue(dataList, sources, stage){
     mounted: function(){
         this.loadData(dataList)
         this.setStage(stage)  
-        console.log(sources[unit_number]['Date']); 
+        console.log(sources[unit_number]['Deadline']); 
         console.log(sources[unit_number]['Materials']); 
     },
     delimiters: ['[[', ']]'],  
     data: {
         dataList : dataList, 
         slides : sources[unit_number]['Materials'], 
-        deadline : sources[unit_number]['Date'], 
+        deadline : sources[unit_number]['Deadline'], 
         stage : stage, 
         pubs : [], 
         drafts : [], 

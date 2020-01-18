@@ -1,6 +1,6 @@
 import sys, boto3, random, base64, os, secrets, httplib2, json, ast
 from sqlalchemy import asc, desc 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from flask import render_template, url_for, flash, redirect, request, abort, jsonify  
 from app import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user, login_required
@@ -93,7 +93,7 @@ def processRecord(unit, stage):
         record = jRecord.query.filter_by(username=current_user.username).first()  
         print('2')
     
-    ### how to keep stage record?
+
     try: 
         if student_record[unit]['stage'] == stage:
             pass
@@ -107,7 +107,6 @@ def processRecord(unit, stage):
 
     record.Midterm = str(student_record)
     db.session.commit()
-
         
 
 
@@ -115,26 +114,23 @@ def processRecord(unit, stage):
 def sendData():  
     unit = request.form ['unit']  
     stage = request.form ['stage']
-    date = 'date variable not set' #request.form ['date']  
+    date_code = request.form ['date']  
     obj = request.form ['obj'] 
     work = request.form ['work'] 
-    name = current_user.username
-    user = User.query.filter_by(username=name).first() 
-    processRecord(unit, stage) 
-    
+    name = current_user.username     
+    processRecord(unit, stage)   
     
     dataDict = ast.literal_eval(obj) 
     userDict = {}
     #### check stage of adding data
-    if work == 'plan':                 
-        
+    if work == 'plan':   
         userDict['meta'] = {
                 'name' : name, 
                 'unit' : unit,
-                'date' : date,
-                'avatar' : user.avatar, 
-                'image' : S3_LOCATION + user.image_file, 
-                'theme' : user.theme,
+                'date' : 'none',
+                'avatar' : current_user.avatar, 
+                'image' : S3_LOCATION + current_user.image_file, 
+                'theme' : current_user.theme,
                 'stage' : stage
                 }        
     else:
@@ -142,8 +138,14 @@ def sendData():
         get_data = loadAWS(file, int(unit)) 
         userDict = ast.literal_eval(json.dumps(get_data))
 
+    #### record the date of first draft-complete recorded
+    if date_code == 'update':
+        today = date.today()
+        userDict['meta']['date'] = str(today)
+    
     userDict[work] = dataDict 
     userDict['meta']['stage'] = stage
+    
     print('UPDATED ', userDict)
     
     putAWS(int(unit), userDict)
@@ -157,7 +159,7 @@ def sendData():
 @app.route("/topic_list", methods = ['GET', 'POST'])
 @login_required
 def topic_list():
-    topDict = {}
+    topDict = {}        
 
     SOURCES = loadAWS('json_files/sources.json', 0)
     sources = SOURCES['sources']
@@ -220,10 +222,6 @@ def topicCheck(unit):
     #print('DATA', type(dataList), dataList)
     return jsonify({'dataList' : dataList, 'sources' : sources, 'stage' : stage})
 
-
-
-
-
 """ ### PLAN/WORK/REVISE/PUBLISH ### """
 
 @app.route("/work/<string:part>/<string:unit>", methods = ['GET', 'POST'])
@@ -232,7 +230,13 @@ def part(part, unit):
     
     return render_template('work/' + part + '.html', unit=unit)
 
+""" ### INSTRUCTOR DASHBOARD ### """
 
+@app.route("/dashboard", methods = ['GET', 'POST'])
+@login_required
+def dashboard():
+
+    return  render_template('work/dashboard.html')
 
 
 

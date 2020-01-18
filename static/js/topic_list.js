@@ -16,7 +16,7 @@ function startVue(topOBJ){ new Vue({
     methods: {
         barStyle: function(theme, stage){            
             var stage_bar = {
-                0 : '5%', 
+                0 : '2%', 
                 1 : '20%', 
                 2 : '40%', 
                 3 : '60%', 

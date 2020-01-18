@@ -7,9 +7,9 @@
     <div class="list-section">
         <h1 style="display:inline"> Topic </h1>         
         <h1 id="unit" style="display:inline">{{unit}}</h1>
-
-        <h2> [[ deadline ]] </h2>
         <br>
+        <h5 style="color:{{current_user.theme}}"> Deadline: [[ deadline ]] </h5>
+        
         <div class="frame-section embed-responsive embed-responsive-4by3">
             <iframe id="questions_embed" :src="slides"
             allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
