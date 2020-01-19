@@ -74,13 +74,13 @@ def jChecker(check, unit):
     elif check == 'sources':
         SOURCES = loadAWS('json_files/sources.json', 0)
         sources = json.dumps(SOURCES['sources'])
-        work = 'None'  
+        work = 'None' 
 
-    print('DATA', type(work),  str(work))
+    #print('DATA', type(work),  str(work))
     return jsonify({'work' : work, 'sources' : sources})
 
 
-def processRecord(unit, stage):
+def processRecord(unit, stage, count):
     ## make student_record
     record = jRecord.query.filter_by(username=current_user.username).first()  
     if record:
@@ -91,19 +91,22 @@ def processRecord(unit, stage):
         start_record = jRecord(username=current_user.username, Midterm=str(student_record))
         db.session.add(start_record)
         record = jRecord.query.filter_by(username=current_user.username).first()  
-        print('2')
-    
+        print('2')    
 
-    try: 
-        if student_record[unit]['stage'] == stage:
-            pass
-        else: 
-            student_record[unit]['stage'] = stage 
-        print('3')
-    except:
-        student_record[unit] = {}
-        student_record[unit]['stage'] = stage  
-        print('4')
+    if stage == "1":
+        student_record[unit] = {
+            'stage' : stage,
+            'date_plan' : date.today(),
+            'count' : 'none',
+            'date_draft' : 'none',
+            'date_revise' : 'none'
+        }
+    if stage == "2":
+        student_record[unit]['stage'] = stage
+        student_record[unit]['count'] = count
+        student_record[unit]['date_draft'] = date.today()
+    if stage == "3":
+        student_record[unit]['stage'] = stage   
 
     record.Midterm = str(student_record)
     db.session.commit()
@@ -113,13 +116,15 @@ def processRecord(unit, stage):
 @app.route('/sendData', methods=['POST'])
 def sendData():  
     unit = request.form ['unit']  
-    stage = request.form ['stage']
-    date_code = request.form ['date']  
     obj = request.form ['obj'] 
-    work = request.form ['work'] 
-    name = current_user.username     
-    processRecord(unit, stage)   
-    
+    stage = request.form ['stage']
+    count = request.form ['count']
+    date_code = request.form ['date']  
+    work = request.form ['work']        
+    processRecord(unit, stage, count)
+
+    name = current_user.username  
+
     dataDict = ast.literal_eval(obj) 
     userDict = {}
     #### check stage of adding data
@@ -153,8 +158,47 @@ def sendData():
     return jsonify({'name' : name, 'work' : work})
 
 
-""" ### TOPICS ### """
+@app.route('/sendRevise', methods=['POST'])
+def sendRevise():  
+    unit = request.form ['unit']  
+    html = request.form ['html']
+    text = request.form ['text']
+    stage = request.form ['stage']
+    revised = request.form ['revised']
+    work = 'revise'
+    student = request.form ['student']     
+    count = None
 
+    processRecord(unit, stage, count)
+
+    if int(stage) == 3:
+        dataDict = {
+            'html' : html, 
+            'text' : text, 
+            'revised' : revised
+        } 
+        file = student + '.json'
+        get_data = loadAWS(file, int(unit)) 
+        userDict = ast.literal_eval(json.dumps(get_data))    
+        
+        userDict[work] = dataDict 
+        userDict['meta']['stage'] = stage
+
+    if int(stage) == 4:
+        file = current_user.username + '.json'
+        get_data = loadAWS(file, int(unit)) 
+        userDict = ast.literal_eval(json.dumps(get_data)) 
+
+        userDict[work]['revised'] = revised
+        userDict['meta']['stage'] = stage
+        
+    print('UPDATED ', userDict)    
+    putAWS(int(unit), userDict)
+    
+    return jsonify({'name' : student, 'work' : work})
+
+
+""" ### TOPICS ### """
 
 @app.route("/topic_list", methods = ['GET', 'POST'])
 @login_required
@@ -222,6 +266,7 @@ def topicCheck(unit):
     #print('DATA', type(dataList), dataList)
     return jsonify({'dataList' : dataList, 'sources' : sources, 'stage' : stage})
 
+
 """ ### PLAN/WORK/REVISE/PUBLISH ### """
 
 @app.route("/work/<string:part>/<string:unit>", methods = ['GET', 'POST'])
@@ -230,13 +275,38 @@ def part(part, unit):
     
     return render_template('work/' + part + '.html', unit=unit)
 
+
 """ ### INSTRUCTOR DASHBOARD ### """
 
 @app.route("/dashboard", methods = ['GET', 'POST'])
 @login_required
 def dashboard():
 
-    return  render_template('work/dashboard.html')
+    recList = {}    
+    records = jRecord.query.all()
+    for rec in records:
+        stuDict = ast.literal_eval(rec.Midterm)
+        recList[rec.username] = stuDict
+
+    recOBJ = json.dumps(recList)
+
+    return  render_template('instructor/dashboard.html', recOBJ=recOBJ)
+
+@app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
+@login_required
+def editor(student, unit):
+
+    file = student + '.json'
+    obj = loadAWS(file, int(unit)) 
+
+    print(obj)
+    
+    text = ''
+    for part in obj['draft']:
+        text += obj['draft'][part]
+    
+
+    return  render_template('instructor/editor.html', text=text, student=student, unit=unit)
 
 
 

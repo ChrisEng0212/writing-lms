@@ -18,6 +18,12 @@
                 <span > - [[ planOBJ[index][1] ]] </span> <br> <br>
             </div>  
 
+            <div v-if="helper[key]">            
+                    <iframe :src="slides[key]"
+                        allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+                    </iframe>                             
+            </div>  
+
             <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input" ></textarea>
             <textarea v-else  class="input1" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input" placeholder="...."></textarea> 
             <br>            
@@ -37,11 +43,7 @@
             </div> 
             
                                    
-                <div v-if="helper[key]">            
-                    <iframe :src="slides[key]"
-                        allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
-                    </iframe>                             
-                </div>  
+                
             <br>
         </div> 
     </div>  

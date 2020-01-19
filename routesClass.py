@@ -21,7 +21,7 @@ IDLIST = BaseConfig.IDLIST
 # ATT_TEAM
 # ATT_DASH
 # ATT_LOG 
-# DSIPLAY TEAMS
+# DISPLAY TEAMS
 # REMOVE STUDENTS 
 
 @app.route ("/students")

@@ -49,6 +49,7 @@ function sendData(plan, stage){
             unit : document.getElementById('unit').innerHTML, 
             obj : JSON.stringify(plan),
             stage : stage,
+            count : 0,
             date : 'plan', 
             work : 'plan'           
         },

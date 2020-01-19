@@ -1,6 +1,10 @@
 
 textarea:focus {
-    outline: none !important;
+    outline: none !important;    
+}
+
+.mark-ip {
+    width:100% !important
 }
 
 
