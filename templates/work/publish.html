@@ -9,13 +9,34 @@
         <h1 id="unit" style="display:inline">{{unit}}</h1>
         <br><br>  
 
-        <div style="background:GAINSBORO; border-radius:5px">
+        <h3> Image </h3>
+        <img :scr="imageSRC" alt="your picture">
 
-        <p align="justify" style="padding-left:8px; padding-right:8px;font-size:15px"> </p>
+        <input type="file" id="pic" accept="image/*" @change="image()"> <button class="btn"> Upload Image </button>
+        
 
+
+        <textarea class="input3" id="title" @focus="selectText('title')" @blur="deSelect('title', '0')" v-model="title"></textarea>
+        
+        <h1 v-model="title">[[ title ]]<h1>
+
+        <img class="rounded-circle chat-img" style="display:inline-block" :src="meta['image']"> 
+        <span :style="theme"> Written by [[  meta['avatar']  ]]  </span>
+        
+        
+        <br> 
+
+        <div style="background:darkslategrey; border-radius:5px">
+        <p style="padding-left:8px; padding: 10px ;font-size:16px" v-model="publish"> [[ publish ]] </p>
+        </div> 
+
+        <h6> Check your writing and make any last minute changes below </h6>
+        <div>             
+        <textarea class="input3" id="text" @focus="selectText('text')" @blur="deSelect('text', '0')" v-model="publish"></textarea>
         </div> 
 
     </div>  
+
 
     <div class="list-section" v-if="save">            
         <button type="button" class="btn btn-outline-success" style="background:dimgray;color:springgreen; width:48%" v-on:click="readRefs"> PUBLISH </button>  

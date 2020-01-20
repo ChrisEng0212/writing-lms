@@ -198,6 +198,43 @@ def sendRevise():
     return jsonify({'name' : student, 'work' : work})
 
 
+def imageAWS(data, unit):   
+    # S3_Location / 1 / 1 / mark 
+    _ , f_ext = os.path.splitext(data.filename) # _  replaces f_name which we don't need #f_ext  file extension     
+    data_filename =  int(unit) + '/' + current_user.username + f_ext 
+    s3_filename =  S3_LOCATION + data_filename     
+    s3_resource.Bucket(S3_BUCKET_NAME).put_object(Key=data_filename, Body=data) 
+
+    return s3_filename
+
+
+@app.route('/sendImage', methods=['POST'])
+def sendImage(): 
+    print('SENDIMAGE ACTIVE') 
+    unit = request.form ['unit']  
+    image_string = request.form ['selectedFile']   
+    image_dict = json.loads(image_string) 
+    work = 'publish'    
+
+    print (image_dict)
+
+    imageLink = imageAWS(image_dict, unit)
+
+    file = current_user.username + '.json'
+    get_data = loadAWS(file, int(unit)) 
+    userDict = ast.literal_eval(json.dumps(get_data)) 
+
+    if userDict[work]:
+        userDict[work]['image'] = imageLink
+    else:
+        userDict[work] = {}
+        userDict[work]['image'] = imageLink   
+      
+    putAWS(int(unit), userDict[work])
+    
+    return jsonify({'name' : student, 'imageLink' : imageLink})
+
+
 """ ### TOPICS ### """
 
 @app.route("/topic_list", methods = ['GET', 'POST'])

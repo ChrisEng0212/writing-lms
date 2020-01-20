@@ -1,7 +1,7 @@
 
 let jString = document.getElementById('recs').innerHTML
 console.log(jString)
-var newOBJ = JSON.parse(jString)
+const newOBJ = JSON.parse(jString)
 console.log(newOBJ)
 
 

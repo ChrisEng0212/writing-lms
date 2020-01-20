@@ -10,16 +10,15 @@
 
  <table class="table" style="color:white">
 
- [[ recOBJ]]
        
 
     <div>   
 
         <tbody>
-            <template v-for="(student, key) in recOBJ"  :key="key" > 
+            <template v-for="(student, key) in recOBJ"> 
                <tr>
                <td> [[ key ]] </td> 
-               <td>  [[ student ]] </td> 
+               <td>  </td> 
                <td>  </td> 
                <td>  </td> 
                <td>  </td>
@@ -27,13 +26,14 @@
                <td>  </td>
                </tr> 
 
-               <template v-for="(unit, ky) in student"  :key="key" > 
+               <template v-for="(unit, ky) in student"> 
                   <tr>
                      <td> [[ ky ]] </td> 
-                     <td> [[ unit ]] </td>
+                     <td> [[ unit.stage ]] </td>
                      <td> date </td>
                      <td> [[ unit.count ]] </td>
-                     <td v-if="unit.stage=2" @click="goToRevise(key, ky)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td v-if="unit.stage == 2" @click="goToRevise(key, ky)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td v-else-if="unit.stage > 2" @click="goToRevise(key, ky)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
                      <td @click="goToPlan(key, ky)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;PLAN&emsp;&emsp; </span> </td> 
                   
                   </tr>
@@ -50,7 +50,7 @@
 </div> <!-- end of Vue app -->
 
 
-<span id="recs"> {{recOBJ}} </span>
+<span id="recs" style="color:white"> {{recOBJ}} </span>
 
 {% endblock %}
 

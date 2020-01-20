@@ -22,6 +22,30 @@ $.ajax({
 });
 
 
+
+function sendImage(form_data){
+    
+    
+   
+    $.ajax({    
+        type : 'POST',
+        data : {
+            form_data : form_data,            
+            unit : unit_number, 
+            processData: false,
+            contentType: false,
+            cache : false,
+            dataType : 'json'                 
+        },
+        url : '/sendImage'   
+    })
+    .done(function(data) {              
+        if (data) {                
+            alert(data.image)           
+        }
+    });    
+}
+
 function sendData(revised){
     console.log(revised)
     $.ajax({    
@@ -48,18 +72,47 @@ function startVue(meta, revised){
     let app = new Vue({   
 
     el: '#vue-app',
-    delimiters: ['[[', ']]'],  
-    mounted: function(){        
-        this.deSelect('text', 'start')       
-    },
+    delimiters: ['[[', ']]'],     
     data: {
         publish : revised,       
-        metaOBJ : meta,         
+        meta : meta, 
+        title : 'Title',        
         save : false,
-        status : meta['status'],
-        theme : { 'color' : meta['theme'] }    
+        imageSRC : null,        
+        theme : { color : meta['theme'],  display:'inline-block', 'font-size': '25px'}    
     }, 
-    methods: {        
+    methods: { 
+        selectText: function(id){
+            console.log(id)            
+            document.getElementById(id).setAttribute('class', 'input2')          
+        },
+        deSelect: function(id, start){
+            if (start!='start') {
+                this.save = true
+                }    
+            
+            console.log('SAVE', this.revText );            
+              
+            let textBox = document.getElementById(id)
+            console.log('Height', textBox.scrollHeight)
+            textBox.setAttribute('class', 'input3') 
+            textBox.setAttribute('style', 'height:' + textBox.scrollHeight +'px !important')            
+        },  
+        image: function () {
+            selectedFile = document.getElementById('pic').files[0]
+
+            console.log(selectedFile)
+            var form_data = new FormData();
+
+            form_data.append('image', document.getElementById('pic').files[0])
+            form_data.append()
+            console.log(form_data);
+            sendImage(form_data)
+
+
+
+
+        },   
         readRefs: function(){             
             sendData(this.revText) 
             alert('Please wait a moment while your writing is being updated') 
