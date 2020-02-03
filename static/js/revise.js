@@ -2,50 +2,25 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-$.ajax({    
-    type : 'POST',
-    url : '/jCheck/work/' + unit_number
-   
-})
-.done(function(data) {            
-    if (data.work !='None') {  
-        let whole_obj = JSON.parse(data.work)        
-        let meta = whole_obj['meta']
-        let html = whole_obj['revise']['html']
-        let text = whole_obj['revise']['text'] 
-        console.log('META: ', meta)  
-        startVue(meta, html, text)
-    }
-    else{
-        console.log('No data')
-        alert('You must complete your plan before you can start the writing')        
-    }
-});
+let fullString = document.getElementById('fullDict').innerHTML
+let fullOBJ = JSON.parse(fullString)
+console.log(fullOBJ);
+let info = JSON.parse(fullOBJ['info']) 
+let revise = JSON.parse(fullOBJ['revise']) 
+console.log(revise);
+let html = revise['html']
+let text = revise['text'] 
 
-
-function sendData(revised){
-    console.log(revised)
-    $.ajax({    
-        type : 'POST',
-        data : {
-            unit : document.getElementById('unit').innerHTML,              
-            stage : 4,
-            html : 'html',             
-            student : 'student', 
-            text : 'text',
-            revised : revised
-        },
-        url : '/sendRevise',    
-    })
-    .done(function(data) {              
-        if (data) {                
-            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
-            window.location = (window.location.href).split('work')[0] + 'work/publish' + '/' + unit_number   
-        }
-    });
+if (revise == null){
+    console.log('No data')
+    alert('Please wait for instructors revision')
+    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
 }
 
-function startVue(meta, revise, text){ 
+startVue(info, html, text)
+
+
+function startVue(info, html, text){ 
     let app = new Vue({   
 
     el: '#vue-app',
@@ -54,12 +29,13 @@ function startVue(meta, revise, text){
         this.deSelect('text', 'start')       
     },
     data: {
-        revText : text,
-        revHTML : revise,
-        metaOBJ : meta,         
+        original : text,
+        revText : text, // updated by v-model
+        revHTML : html,
+        infoOBJ : info,         
         save : false,
-        status : meta['status'],
-        theme : { 'color' : meta['theme'] }    
+        status : info['status'],
+        theme : { 'color' : info['theme'] }    
     }, 
     methods: {
         selectText: function(id){
@@ -80,9 +56,28 @@ function startVue(meta, revise, text){
             
         },
         readRefs: function(){             
-            sendData(this.revText) 
+            this.sendData(this.revText) // revText connected by v-model
             alert('Please wait a moment while your writing is being updated') 
         }, 
+        sendData: function (revised){
+            console.log(revised)
+            $.ajax({    
+                type : 'POST',
+                data : {
+                    unit : document.getElementById('unit').innerHTML, 
+                    obj : revised,
+                    stage : 4,                     
+                    work : 'revise'           
+                },
+                url : '/storeData',    
+            })
+            .done(function(data) {              
+                if (data) {                
+                    alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+                    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
+                }
+            });
+        },
         cancel: function(){
             alert('You have cancelled so your changes will not be saved')
             window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         

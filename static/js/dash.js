@@ -9,7 +9,7 @@ console.log(newOBJ)
 let app = new Vue({   
 
     el: '#vue-app',
-    delimiters: ['[[', ']]'],     
+    delimiters: ['[[', ']]'],      
     data: {
         recOBJ : newOBJ
     }, 

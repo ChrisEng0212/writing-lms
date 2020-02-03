@@ -30,11 +30,11 @@
 
     <div v-for="plan in plans">
     
-      <img class="rounded-circle chat-img" style="" :src="plan['meta']['image']"> 
-      <span class="avatar" :style="color(plan['meta']['theme'])"> [[  plan['meta']['avatar']  ]] </span>
+      <img class="rounded-circle chat-img" style="" :src="plan['info']['image']"> 
+      <span class="avatar" :style="color(plan['info']['theme'])"> [[  plan['info']['avatar']  ]] </span>
       <br>
           <template v-for="(item, key) in plan['plan']">    
-            <span class="pspan" :style="color(plan['meta']['theme'])"> [[ key ]]: </span>
+            <span class="pspan" :style="color(plan['info']['theme'])"> [[ key ]]: </span>
             <span class="pspan" style="color:white"> [[  item  ]] </span>  
             <br>  
           </template>     
@@ -44,16 +44,17 @@
     <legend class="border-bottom" style="color:white">Drafts</legend> 
 
     <div v-for="draft in drafts">
-    
-      <img class="rounded-circle chat-img" style="" :src="draft['meta']['image']"> 
-      <span class="avatar" :style="color(draft['meta']['theme'])"> [[  draft['meta']['avatar']  ]] </span>
+
+      <img class="rounded-circle chat-img" style="" :src="draft['info']['image']"> 
+      <span class="avatar" :style="color(draft['info']['theme'])"> [[  draft['info']['avatar']  ]] </span>
+      <template v-for="(item, key) in draft['draft']">
       <br>
-          <template v-for="(item, key) in draft['draft']">    
-            <span class="pspan" :style="color(draft['meta']['theme'])"> [[ key ]]: </span>
-            <span class="pspan" style="color:white"> [[  item  ]] </span>  
-            <br>  
-          </template>     
-      <br> 
+      <span class="pspan" :style="color(draft['info']['theme'])"> [[ key ]]: </span>
+      <span class="pspan" style="color:white"> [[  item  ]] </span>        
+      </template>
+      <br>
+      </br>
+      
     </div>
     
      

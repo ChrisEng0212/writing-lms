@@ -2,84 +2,39 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-$.ajax({    
-    type : 'POST',
-    url : '/jCheck/work/' + unit_number
-   
-})
-.done(function(data) {            
-    if (data.work !='None') {  
-        let whole_obj = JSON.parse(data.work)        
-        let meta = whole_obj['meta']
-        let revised = whole_obj['revise']['revised']
-        console.log('META: ', meta)  
-        startVue(meta, revised)
-    }
-    else{
-        console.log('No data')
-        alert('You must complete your plan before you can start the writing')        
-    }
-});
+let fullString = document.getElementById('fullDict').innerHTML
+let fullOBJ = JSON.parse(fullString)
+let info = JSON.parse(fullOBJ['info']) 
+let revise = JSON.parse(fullOBJ['revise']) 
+let revised = revise['revised']
+let text = revise['text']
+//let publish = JSON.parse(fullOBJ['publish']) 
+//let imageLink = publish['imageLink']
 
-
-
-function sendImage(form_data){
-    
-    
-   
-    $.ajax({    
-        type : 'POST',
-        data : {
-            form_data : form_data,            
-            unit : unit_number, 
-            processData: false,
-            contentType: false,
-            cache : false,
-            dataType : 'json'                 
-        },
-        url : '/sendImage'   
-    })
-    .done(function(data) {              
-        if (data) {                
-            alert(data.image)           
-        }
-    });    
+if (revised == null){
+    console.log('No data')
+    alert('Please wait for instructors revision')
+    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
 }
 
-function sendData(revised){
-    console.log(revised)
-    $.ajax({    
-        type : 'POST',
-        data : {
-            unit : document.getElementById('unit').innerHTML,              
-            stage : 5,
-            html : 'html',             
-            student : 'student', 
-            text : 'text',
-            revised : revised
-        },
-        url : '/sendRevise',    
-    })
-    .done(function(data) {              
-        if (data) {                
-            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
-            window.location = (window.location.href).split('work')[0] + 'blog'
-        }
-    });
-}
+startVue(info, revised)
 
-function startVue(meta, revised){ 
+function startVue(info, revised){ 
     let app = new Vue({   
 
     el: '#vue-app',
-    delimiters: ['[[', ']]'],     
+    delimiters: ['[[', ']]'],
+    mounted : function (){
+        document.getElementById('final_image').scr = this.imageLink  
+    },     
     data: {
         publish : revised,       
-        meta : meta, 
+        info : info, 
+        base64data : null, 
         title : 'Title',        
         save : false,
-        imageSRC : null,        
-        theme : { color : meta['theme'],  display:'inline-block', 'font-size': '25px'}    
+        imageLink : null,        
+        theme : { color : info['theme'],  display:'inline-block', 'font-size': '25px'}    
     }, 
     methods: { 
         selectText: function(id){
@@ -107,14 +62,83 @@ function startVue(meta, revised){
             form_data.append('image', document.getElementById('pic').files[0])
             form_data.append()
             console.log(form_data);
-            sendImage(form_data)
-
-
-
-
-        },   
+            sendImage(form_data)       
+        }, 
+        fileValidation : function(){    
+          var fileInput = document.getElementById('pic');        
+          console.log('file', fileInput)
+          var filePath = fileInput.value;
+          var allowedExtensions = /(\.jpeg|\.png|\.jpg)$/i;
+      
+            if(fileInput.files[0].size > 4400000){
+                alert("File is too big!"); 
+                fileInput.value = '';             
+                return false;        
+            }
+            else if(!allowedExtensions.exec(filePath)){
+                alert('Please upload image: .jpeg/.png only.');
+                fileInput.value = '';
+                return false;
+            }    
+            else{            
+                console.dir( fileInput.files[0] );    
+                var url = window.URL.createObjectURL(fileInput.files[0]);        
+                fetch(url)
+                .then(function(res){
+                    return res.blob();
+                    })
+                .then(function(savedBlob){
+                    var reader = new FileReader();
+                    reader.readAsDataURL(savedBlob);          
+                    reader.onloadend = function() {
+                        app.base64data = reader.result.split(',')[1];  
+                        console.log(app.base64data); 
+                        } 
+                })  
+            }//end else
+            this.uploadImage()   
+        },//end fileValidation  
+        uploadImage: function (){
+            console.log()
+            $.ajax({    
+                type : 'POST',
+                data : {
+                    unit : document.getElementById('unit').innerHTML, 
+                    b64String : app.base64data,                                       
+                          
+                },
+                url : '/sendImage',    
+            })
+            .done(function(data) {              
+                if (data) {
+                    console.log(data.imageLink);    
+                    app.imageLink = data.imageLink  
+                    document.getElementById('final_image').src = app.imageLink    
+                }
+            });
+        },
+        sendData: function (){            
+            $.ajax({    
+                type : 'POST',
+                data : {
+                    unit : document.getElementById('unit').innerHTML, 
+                    obj : null,
+                    title : app.title, 
+                    imageLink : app.imageLink,
+                    stage : 5,                     
+                    work : 'publish'           
+                },
+                url : '/storeData',    
+            })
+            .done(function(data) {              
+                if (data) {                
+                    alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+                    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
+                }
+            });
+        },
         readRefs: function(){             
-            sendData(this.revText) 
+            this.sendData(this.revText) 
             alert('Please wait a moment while your writing is being updated') 
         }, 
         cancel: function(){

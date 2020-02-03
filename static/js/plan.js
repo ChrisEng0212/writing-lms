@@ -1,82 +1,42 @@
 
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
+let fullString = document.getElementById('fullDict').innerHTML
 
+let srcString = document.getElementById('sources').innerHTML
 
-$.ajax({    
-    type : 'POST',
-    url : '/jCheck/work/' + unit_number
-   
-})
-.done(function(data) {            
-    if (data.work != 'None') {  
-        let whole_obj = JSON.parse(data.work)
-        //let meta = whole_obj['meta']
-        let plan = whole_obj['plan'] 
-        let sources = JSON.parse(data.sources)
-        let slides = sources[unit_number]['Materials']                
-        //console.log('META: ', meta)
-        console.log('PLAN: ', plan)
-        console.log('SLIDES: ', slides)
-        startVue(plan, slides)
+let sources = JSON.parse(srcString)
+let slides = sources[unit_number]['Materials']  
+let fullOBJ = JSON.parse(fullString)
+let plan = JSON.parse(fullOBJ['plan']) 
+
+console.log(fullOBJ)
+console.log(plan)
+console.log(sources)
+
+if (plan == null){
+    plan = {
+        "Topic" : "",
+        "Thesis": "", 
+        "Idea_1": "", 
+        "Details_1": "", 
+        "Idea_2": "", 
+        "Details_2": "", 
+        "Idea_3": "", 
+        "Details_3": "", 
     }
-    else{
-        console.log('No data')
-        let plan = {
-            "Topic" : "",
-            "Thesis": "", 
-            "Idea_1": "", 
-            "Details_1": "", 
-            "Idea_2": "", 
-            "Details_2": "", 
-            "Idea_3": "", 
-            "Details_3": "", 
-        }
-        let sources = JSON.parse(data.sources)
-        let slides = sources[unit_number]['Materials'] 
-        console.log('PLAN: ', plan)
-        console.log('SLIDES: ', slides)       
-        startVue(plan, slides)
-    }
-});
-
-
-function sendData(plan, stage){
-    console.log(plan, stage)
-    $.ajax({    
-        type : 'POST',
-        data : {
-            unit : document.getElementById('unit').innerHTML, 
-            obj : JSON.stringify(plan),
-            stage : stage,
-            count : 0,
-            date : 'plan', 
-            work : 'plan'           
-        },
-        url : '/sendData',    
-    })
-    .done(function(data) {              
-        if (data) {                
-            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
-            window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
-        }
-    });
 }
 
+startVue(plan, slides)
 
 function startVue(plan, slides){ new Vue({   
 
     el: '#vue-app',
     delimiters: ['[[', ']]'], 
-    mounted: function(){        
-        this.deSelect('Topic', '0')
-        this.deSelect('Thesis', '1') 
-        this.deSelect('Idea_1', '2') 
-        this.deSelect('Details_1', '3') 
-        this.deSelect('Idea_2', '4') 
-        this.deSelect('Details_2', '5')
-        this.deSelect('Idea_3', '6') 
-        this.deSelect('Details_3', '7')        
+    mounted: function(){ 
+        for (var head in plan){
+            this.deSelect(head)
+        }                 
     }, 
     data: {        
         planOBJ : plan,       
@@ -84,7 +44,6 @@ function startVue(plan, slides){ new Vue({
         save : false,        
         control : {}
     }, 
-
     methods: {
         selectText: function(id){
             console.log(id)  
@@ -160,9 +119,28 @@ function startVue(plan, slides){ new Vue({
                     stage = 0                 
                 }  
             }            
-            sendData(this.planOBJ, stage)
+            this.sendData(this.planOBJ, stage)
             alert('Please wait a moment while your writing is updating')    
         }, 
+        sendData: function (obj, stage){
+            console.log(obj, stage)
+            $.ajax({    
+                type : 'POST',
+                data : {
+                    unit : document.getElementById('unit').innerHTML, 
+                    obj : JSON.stringify(obj),
+                    stage : stage,                     
+                    work : 'plan'           
+                },
+                url : '/storeData',    
+            })
+            .done(function(data) {              
+                if (data) {                
+                    alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+                    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
+                }
+            });
+        },
         cancel: function(){
             alert('You have cancelled so your changes will not be saved')
             window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         

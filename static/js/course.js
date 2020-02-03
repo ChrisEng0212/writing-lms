@@ -31,13 +31,7 @@ function startVue(course, color){ new Vue({
             }
             return styles[name]
         }
-    },
-    computed: {
-        
-
-    }
-    
-    
+    }    
 })
 
 

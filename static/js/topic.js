@@ -7,13 +7,12 @@ $.ajax({
 })
 .done(function(data) { 
          
-    if (data) {  
-        console.log(data.dataList); 
+    if (data) {         
         let dataList = data.dataList // this is a list so cannot Jparse
         let sources = JSON.parse(data.sources)
         let stage = data.stage
-        console.log(dataList) 
-        console.log(stage);  
+        console.log(dataList, typeof(dataList)) 
+        console.log(stage, typeof(stage));  
 
         startVue(dataList, sources, stage)
     }
@@ -29,9 +28,7 @@ function startVue(dataList, sources, stage){
     el: '#vue-app',
     mounted: function(){
         this.loadData(dataList)
-        this.setStage(stage)  
-        console.log(sources[unit_number]['Deadline']); 
-        console.log(sources[unit_number]['Materials']); 
+        this.setStage(parseInt(stage))           
     },
     delimiters: ['[[', ']]'],  
     data: {
@@ -54,28 +51,33 @@ function startVue(dataList, sources, stage){
     methods: {
         loadData: function(dataList){
             for (obj in dataList) {
-                var work = JSON.parse(dataList[obj])
-                console.log('WORK', work['meta'])
+                var work =  JSON.parse(dataList[obj])
+                console.log('WORK', work)
                 //cascading conditionals to fill up the lists   
-                if (work['meta']['stage'] > 2) {
+                if (work['info']['stage'] > 2) {
                     if (this.pubs.length < 2 ) {
                         this.pubs.push(work)
                         continue
                     }                                        
                 }
-                if (work['meta']['stage'] > 1) {
+                if (work['info']['stage'] > 1) {
                     if (this.drafts.length < 2 ) {
                         this.drafts.push(work)
+                        console.log('PLAN_LENGTH', this.drafts.length)
+                        console.log(this.draft);
                         continue
                     }                    
                 }
-                if (work['meta']['stage'] > 0){
+                if (work['info']['stage'] > 0){
                     if (this.plans.length < 2 ) {
-                        console.log('LENGTH', this.plans.length)
+                        console.log('DRAFTS_LENGTH', this.plans.length)
+                        console.log(this.plans);
                         this.plans.push(work)
                         continue
                      }                       
                 }  
+                
+                
                 console.log('Not added ', work);             
                 
             }// end for
@@ -88,8 +90,8 @@ function startVue(dataList, sources, stage){
             window.location = (window.location.href).split('work')[0] + 'work/' + work + '/' + unit_number
         },
     
-        setStage: function(stage){
-            if (stage > 0) {
+        setStage: function(stage){            
+            if (stage > 0) {               
                 this.buttons['draft'] = true
             } 
             if (stage > 2) {

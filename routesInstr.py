@@ -12,9 +12,7 @@ from meta import BaseConfig
 s3_resource = BaseConfig.s3_resource  
 S3_LOCATION = BaseConfig.S3_LOCATION
 S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
-SCHEMA = BaseConfig.SCHEMA
 DESIGN = BaseConfig.DESIGN
-STUDENTID = []
 
 def loadAWS(file, unit):   
     if unit == 0 :
@@ -30,6 +28,7 @@ def loadAWS(file, unit):
 
     return jload
 
+
 @app.route ("/", methods = ['GET', 'POST'])
 @app.route ("/home", methods = ['GET', 'POST'])
 def home():     
@@ -39,15 +38,16 @@ def home():
 
 @app.route ("/about")
 @login_required 
-def about():     
-     
+def about():   
 
     return render_template('instructor/about.html', about=about, siteName=S3_BUCKET_NAME)
 
 
 @app.route('/courseCheck', methods=['POST'])
 def courseCheck():  
-    SOURCES = loadAWS('json_files/sources.json', 0)   
+    content_object = s3_resource.Object( S3_BUCKET_NAME, 'json_files/sources.json' )
+    file_content = content_object.get()['Body'].read().decode('utf-8')
+    SOURCES = json.loads(file_content)   
     print(SOURCES)       
     course = json.dumps(SOURCES['schedule'])     
     color = json.dumps(DESIGN)    
@@ -56,7 +56,11 @@ def courseCheck():
 
 @app.route("/course", methods = ['GET', 'POST'])
 @login_required
-def course():     
+def course(): 
+
+
+    
+        
     return render_template('instructor/course.html')
 
 

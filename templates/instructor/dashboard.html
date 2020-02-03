@@ -4,20 +4,17 @@
 
 <div id="vue-app"> 
 
-
 <div class="list-section">    
 <legend class="border-bottom mb-4">Dashboard</legend> 
 
  <table class="table" style="color:white">
 
-       
-
     <div>   
 
         <tbody>
-            <template v-for="(student, key) in recOBJ"> 
+            <template v-for="(model, unit) in recOBJ"> 
                <tr>
-               <td> [[ key ]] </td> 
+               <td> [[ unit ]] </td> 
                <td>  </td> 
                <td>  </td> 
                <td>  </td> 
@@ -26,15 +23,16 @@
                <td>  </td>
                </tr> 
 
-               <template v-for="(unit, ky) in student"> 
+               <template v-for="(student, ky) in model"> 
                   <tr>
                      <td> [[ ky ]] </td> 
-                     <td> [[ unit.stage ]] </td>
-                     <td> date </td>
-                     <td> [[ unit.count ]] </td>
-                     <td v-if="unit.stage == 2" @click="goToRevise(key, ky)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
-                     <td v-else-if="unit.stage > 2" @click="goToRevise(key, ky)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
-                     <td @click="goToPlan(key, ky)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;PLAN&emsp;&emsp; </span> </td> 
+                     <td> [[ student['stage'] ]] </td>
+                     <td> [[ student['plan_date_finish'] ]] </td>
+                     <td> [[ student['draft_date_finish'] ]] </td>
+                     <td v-if="student['stage'] == 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td v-else-if="student['stage'] > 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td v-else @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;NOT YET&emsp;&emsp; </span> </td> 
+                     <td @click="goToPlan(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;PLAN&emsp;&emsp; </span> </td> 
                   
                   </tr>
                </template>     

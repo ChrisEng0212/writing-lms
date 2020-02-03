@@ -6,13 +6,13 @@ from flask_admin.contrib.sqla import ModelView
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
+
+modDictAss = {}
+
 #login manager
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-
 
 class Attendance(db.Model):
     id = db.Column(db.Integer, primary_key=True)     
@@ -74,24 +74,57 @@ class User(db.Model, UserMixin): #import the model
     
 ############### UNIT MODELS ###################################
 
-class jRecord (db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+
+
+class BaseAss(db.Model):
+    __abstract__ = True
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    username = db.Column(db.String)    
-    Midterm = db.Column(db.String)
-    Final = db.Column(db.String)    
-    extraStr = db.Column(db.String)
-    extraInt = db.Column(db.Integer)
+    username =  db.Column(db.String)
+    number = db.Column(db.Integer, unique=True)
+    info = db.Column(db.String)
+    plan = db.Column(db.String)
+    draft = db.Column(db.String)
+    revise = db.Column(db.String)
+    publish = db.Column(db.String) 
+    grade = db.Column(db.Integer) 
+    comment = db.Column(db.String)
+    extra = db.Column(db.String)
+
+class A01A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['01'] = A01A
+
+class A02A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['02'] = A02A
+
+class A03A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['03'] = A03A
+
+class A04A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['04'] = A04A
+
+class A05A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['05'] = A05A
+
+class A06A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['06'] = A06A
 
 
-class aControl (db.Model):
-    id = db.Column(db.Integer, primary_key=True)    
-    deadline = db.Column(db.DateTime) 
-    Unit = db.Column(db.String)
-    Set = db.Column(db.Integer)
-    extraStr = db.Column(db.String)
-    extraInt = db.Column(db.Integer)
 
+##############################3
+listAss = []
+for elements in modDictAss.values():
+    listAss.append(elements)
+
+class Info ():
+    ass_mods_dict = modDictAss
+    ass_mods_list = listAss
+ 
     
     
 
@@ -103,7 +136,7 @@ class MyModelView(ModelView):
             else:
                 return False
         else:
-            return False
+            return True
 
     #https://danidee10.github.io/2016/11/14/flask-by-example-7.html
 
@@ -113,6 +146,6 @@ admin = Admin(app)
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Attendance, db.session))
 admin.add_view(MyModelView(AttendLog, db.session))
-admin.add_view(MyModelView(jRecord, db.session))
-admin.add_view(MyModelView(aControl, db.session))
 
+for ass in listAss:
+    admin.add_view(MyModelView(ass, db.session))

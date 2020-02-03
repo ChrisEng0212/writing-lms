@@ -2,6 +2,15 @@
 textarea:focus {
     outline: none !important;    
 }
+table {
+    color:whitesmoke
+}
+span {
+    color:whitesmoke
+}
+ul {
+    color:whitesmoke
+}
 
 .mark-ip {
     width:100% !important

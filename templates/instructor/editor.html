@@ -73,8 +73,6 @@ function highlight(command, arg){
    editor.document.execCommand(command, false, arg)
 }
 
-
-
 function sendData(){
       toggleText()    
       let html = editor.document.getElementsByTagName('body')[0].textContent
@@ -86,12 +84,14 @@ function sendData(){
         data : {
             unit : unit,             
             stage : 3,
+            obj : 'none',
+            work : 'edit', 
             html : html,             
             student : student, 
             text : text,
             revised : 'none'        
         },
-        url : '/sendRevise',    
+        url : '/storeData',    
     })
     .done(function(data) {              
         if (data) {                

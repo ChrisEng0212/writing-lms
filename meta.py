@@ -12,11 +12,6 @@ except:
     DEBUG = False
 
 
-jList = [[None],
-         ['reading-lms', "json_files/meta.json"],
-         ['workplace-lms', "json_files/meta.json", "json_files/sources.json"],         
-         ['writing-lms', "json_files/meta.json", "json_files/sources.json"],]
-
 s3_resource = boto3.resource('s3',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key= AWS_SECRET_ACCESS_KEY)
@@ -26,7 +21,7 @@ s3_client = boto3.client('s3',
          aws_secret_access_key= AWS_SECRET_ACCESS_KEY)
 
 def loadJson():
-    content_object = s3_resource.Object(   jList[int(AWS_SCHEMA)][0],    jList[int(AWS_SCHEMA)][1]  )    
+    content_object = s3_resource.Object(   'writing-lms', 'json_files/meta.json'  )    
     file_content = content_object.get()['Body'].read().decode('utf-8')
     meta = json.loads(file_content)  
     return meta

@@ -2,91 +2,62 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-$.ajax({    
-    type : 'POST',
-    url : '/jCheck/work/' + unit_number
-   
-})
-.done(function(data) {            
-    if (data.work !='None') {  
-        let whole_obj = JSON.parse(data.work)        
-        let meta = whole_obj['meta']
-        let plan = whole_obj['plan']
-        var draft = whole_obj['draft'] 
-        if (typeof(draft) == "undefined"){
-            var draft = {
-            "Intro" : "",
-            "Part_1": "", 
-            "Part_2": "", 
-            "Part_3": "", 
-            "Closing": "",            
-            }
-        } 
-        let sources = JSON.parse(data.sources)                
-        console.log('META: ', meta)
-        
-        let newPlan = {
-            0 : [plan['Topic'], plan['Thesis']],
-            1 : [plan['Idea_1'], plan['Details_1']], 
-            2 : [plan['Idea_2'], plan['Details_2']], 
-            3 : [plan['Idea_3'], plan['Details_3']],
-            4 : ["", ""]
-        }
-        console.log('PLAN: ', newPlan)
-        console.log('DRAFT: ', draft)        
-        startVue(newPlan, meta, draft, sources)
+let srcString = document.getElementById('sources').innerHTML
+let sources = JSON.parse(srcString)
+let slides = sources[unit_number]['Materials']
+
+let fullString = document.getElementById('fullDict').innerHTML
+let fullOBJ = JSON.parse(fullString)
+let info = JSON.parse(fullOBJ['info']) 
+let plan = JSON.parse(fullOBJ['plan']) 
+let draft = JSON.parse(fullOBJ['draft']) 
+
+let newPlan = ''
+if (plan == null){
+    console.log('No data')
+    alert('You must complete your plan before you can start the writing')
+    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
+}
+else{
+    newPlan = {
+        0 : [plan['Topic'], plan['Thesis']],
+        1 : [plan['Idea_1'], plan['Details_1']], 
+        2 : [plan['Idea_2'], plan['Details_2']], 
+        3 : [plan['Idea_3'], plan['Details_3']],
+        4 : ["", ""]
     }
-    else{
-        console.log('No data')
-        alert('You must complete your plan before you can start the writing')        
-    }
-});
-
-
-function sendData(draft, stage, count, date){
-    console.log(draft, stage)
-    $.ajax({    
-        type : 'POST',
-        data : {
-            unit : document.getElementById('unit').innerHTML, 
-            obj : JSON.stringify(draft),
-            stage : stage,
-            work : 'draft', 
-            count : count, 
-            date : date
-
-        },
-        url : '/sendData',    
-    })
-    .done(function(data) {              
-        if (data) {                
-            alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
-            window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
-        }
-    });
 }
 
+if (draft == null){
+    draft = {
+        "Intro" : "",
+        "Part_1": "", 
+        "Part_2": "", 
+        "Part_3": "", 
+        "Closing": "",            
+        }
+    }
 
-function startVue(plan, meta, draft, sources){ 
+startVue(newPlan, info, draft)
+
+
+function startVue(newPlan, info, draft){ 
     let app = new Vue({   
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],  
     mounted: function(){        
-        this.deSelect('Intro', '0')
-        this.deSelect('Part_1', '1') 
-        this.deSelect('Part_2', '2') 
-        this.deSelect('Part_3', '3') 
-        this.deSelect('Closing', '4') 
+        for (var head in draft){
+            this.deSelect(head)
+        } 
     },
     data: {
-        planOBJ : plan,
-        metaOBJ : meta, 
-        draftOBJ : draft, 
-        srcOBJ : sources, 
+        planOBJ : newPlan,
+        infoOBJ : info, 
+        draftOBJ : draft,          
         save : false,
-        status : meta['status'],
-        theme : { 'color' : meta['theme'] },
+        status : info['status'],
+        theme : { 'color' : info['theme'] },
         control : {
             0 : [], 
             1 : [], 
@@ -111,6 +82,7 @@ function startVue(plan, meta, draft, sources){
             there : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
             commas : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
             words : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+            although : "", 
             Intro  : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true", 
             Part_1 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
             Part_2 : "https://docs.google.com/document/d/e/2PACX-1vQr45ud5ZYkAvB6s6AJ-M-X7PlL1WwjpXzQT1-byPFuMVWw2jSWg5Ejc5AnEdf38lKfYNvWnMJE1mJ2/pub?embedded=true",  
@@ -261,9 +233,29 @@ function startVue(plan, meta, draft, sources){
                     console.log('COUNT', count)
                 } 
             }
-            sendData(this.draftOBJ, status, count, date) 
+            this.sendData(this.draftOBJ, status) 
             alert('Please wait a moment while your writing is being updated') 
         }, 
+        sendData: function (obj, stage){
+            console.log(obj, stage)
+            $.ajax({    
+                type : 'POST',
+                data : {
+                    unit : document.getElementById('unit').innerHTML, 
+                    obj : JSON.stringify(obj),
+                    stage : stage,                     
+                    work : 'draft'           
+                },
+                url : '/storeData',    
+            })
+            .done(function(data) {              
+                if (data) {                
+                    alert('Thank you ' + data.name + ', your ' + data.work + ' has been saved')
+                    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         
+                }
+            });
+        },
+
         cancel: function(){
             alert('You have cancelled so your changes will not be saved')
             window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         

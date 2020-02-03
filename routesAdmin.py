@@ -13,7 +13,6 @@ from meta import BaseConfig
 s3_resource = BaseConfig.s3_resource  
 S3_LOCATION = BaseConfig.S3_LOCATION
 S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
-SCHEMA = BaseConfig.SCHEMA
 META = BaseConfig.META
 DESIGN = BaseConfig.DESIGN
 

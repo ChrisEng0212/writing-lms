@@ -4,24 +4,26 @@
 
 <div id="vue-app"> 
 
+    <span id="sources" style="display:none">{{sources}}</span>      
+    <span id="fullDict" style="display:none">{{fullDict}}</span> 
+
     <div class="list-section">
         <h1 style="display:inline"> Publish </h1> 
         <h1 id="unit" style="display:inline">{{unit}}</h1>
         <br><br>  
 
         <h3> Image </h3>
-        <img :scr="imageSRC" alt="your picture">
-
-        <input type="file" id="pic" accept="image/*" @change="image()"> <button class="btn"> Upload Image </button>
+        <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-width:60%"  src="">
+        <br>
+        <input type="file" id="pic" accept="image/*" @change="fileValidation()"> <button class="btn"> Upload Image </button>
         
-
 
         <textarea class="input3" id="title" @focus="selectText('title')" @blur="deSelect('title', '0')" v-model="title"></textarea>
         
         <h1 v-model="title">[[ title ]]<h1>
 
-        <img class="rounded-circle chat-img" style="display:inline-block" :src="meta['image']"> 
-        <span :style="theme"> Written by [[  meta['avatar']  ]]  </span>
+        <img class="rounded-circle chat-img" style="display:inline-block" :src="info['image']"> 
+        <span :style="theme"> Written by [[  info['avatar']  ]]  </span>
         
         
         <br> 
