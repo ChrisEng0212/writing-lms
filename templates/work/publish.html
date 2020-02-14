@@ -13,9 +13,9 @@
         <br><br>  
 
         <h3> Image </h3>
-        <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-width:60%"  src="">
-        <br>
-        <input type="file" id="pic" accept="image/*" @change="fileValidation()"> <button class="btn"> Upload Image </button>
+        <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-width:60%"  src="https://writing-lms.s3.ap-northeast-1.amazonaws.com/images/01/Test2.jpg">
+        <br><br>
+        <input type="file" id="pic" accept="image/*" @change="fileValidation()"> <button class="btn btn-sm"> Upload Image </button>
         
 
         <textarea class="input3" id="title" @focus="selectText('title')" @blur="deSelect('title', '0')" v-model="title"></textarea>

@@ -8,6 +8,14 @@ table {
 span {
     color:whitesmoke
 }
+
+.revise {
+    color: black;
+    border: 1px solid lightgrey;
+    border-radius: 8px
+}
+
+
 ul {
     color:whitesmoke
 }

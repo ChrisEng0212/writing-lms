@@ -123,11 +123,12 @@ def sendImage():
     print(b64String)
     print('SENDIMAGE ACTIVE') 
     unit = request.form ['unit']  
-    print (b64String)
+    fileType = request.form ['fileType']  
+    print (b64String, fileType)
 
     image = base64.b64decode(b64String)
-    imageLink = S3_LOCATION + 'images/' + unit + '/' + current_user.username + '.png'
-    filename = 'images/' + current_user.username + '/' + unit + '.png'  
+    imageLink = S3_LOCATION + 'images/' + unit + '/' + current_user.username + '.' + fileType
+    filename = 'images/' + unit + '/' + current_user.username + '.' + fileType
     s3_resource.Bucket(S3_BUCKET_NAME).put_object(Key=filename, Body=image)
 
     return jsonify({'name' : current_user.username, 'imageLink' : imageLink})
@@ -218,6 +219,21 @@ def topicCheck(unit):
     #print('DATA', type(dataList), dataList)
     return jsonify({'dataList' : dataList, 'sources' : sources, 'stage' : stage})
 
+## AJAX
+@app.route('/getHTML/<string:unit>', methods=['POST'])
+def getHTML(unit):
+    print('GET HTML ACTIVE')
+    
+    
+    model = Info.ass_mods_dict[unit]
+    entry = model.query.filter_by(username=current_user.username).first() 
+    info = entry.info
+    revise = entry.revise 
+    stage = entry.grade   
+
+    #print('DATA', type(dataList), dataList)
+    return jsonify({'revise' : revise, 'stage' : stage, 'info' : info})
+
 
 """ ### PLAN/WORK/REVISE/PUBLISH ### """
 
@@ -249,7 +265,7 @@ def part(part, unit):
         'revise' : entry.revise,
         'publish' : entry.publish,
     }
-
+    
     #print(fullDict)
 
     SOURCES = loadAWS('json_files/sources.json', 0)

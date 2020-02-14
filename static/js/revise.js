@@ -2,20 +2,31 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-let fullString = document.getElementById('fullDict').innerHTML
-let fullOBJ = JSON.parse(fullString)
-console.log(fullOBJ);
-let info = JSON.parse(fullOBJ['info']) 
-let revise = JSON.parse(fullOBJ['revise']) 
-console.log(revise);
-let html = revise['html']
-let text = revise['text'] 
 
-if (revise == null){
-    console.log('No data')
-    alert('Please wait for instructors revision')
-    window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
-}
+
+
+
+$.ajax({    
+    type : 'POST',
+    url : '/getHTML/' + unit_number   
+})
+.done(function(data) { 
+        console.log(data);
+        if (data.stage < 3){
+        console.log('No data')
+        alert('Please wait for instructors revision')
+        window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
+        }  
+        let revise_obj = JSON.parse(data.revise)        
+        let info = JSON.parse(data.info)  
+        let html = revise_obj['html']
+        let text = revise_obj['text'] 
+        console.log('START VUE')  
+        startVue(info, html, text)    
+});
+
+
+
 
 startVue(info, html, text)
 
@@ -25,7 +36,12 @@ function startVue(info, html, text){
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],  
-    mounted: function(){        
+    mounted: function(){    
+        //this.revHTML = this.revHTML.replace('&lt;', '<'); 
+        console.log(this.revHTML);
+        for (let s of document.getElementsByTagName('span')){
+            s.setAttribute("class", "revise");
+        }
         this.deSelect('text', 'start')       
     },
     data: {
@@ -34,7 +50,7 @@ function startVue(info, html, text){
         revHTML : html,
         infoOBJ : info,         
         save : false,
-        status : info['status'],
+        status : info['stage'],
         theme : { 'color' : info['theme'] }    
     }, 
     methods: {

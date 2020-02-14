@@ -8,8 +8,10 @@ let info = JSON.parse(fullOBJ['info'])
 let revise = JSON.parse(fullOBJ['revise']) 
 let revised = revise['revised']
 let text = revise['text']
-//let publish = JSON.parse(fullOBJ['publish']) 
-//let imageLink = publish['imageLink']
+let publish = JSON.parse(fullOBJ['publish']) 
+let imageLink = publish['imageLink']
+let title = publish['title']
+console.log(imageLink);
 
 if (revised == null){
     console.log('No data')
@@ -31,9 +33,10 @@ function startVue(info, revised){
         publish : revised,       
         info : info, 
         base64data : null, 
-        title : 'Title',        
+        fileType : null, 
+        title : title,        
         save : false,
-        imageLink : null,        
+        imageLink : imageLink,        
         theme : { color : info['theme'],  display:'inline-block', 'font-size': '25px'}    
     }, 
     methods: { 
@@ -68,6 +71,9 @@ function startVue(info, revised){
           var fileInput = document.getElementById('pic');        
           console.log('file', fileInput)
           var filePath = fileInput.value;
+          console.log(filePath);
+          app.fileType = filePath.split('.')[1]
+
           var allowedExtensions = /(\.jpeg|\.png|\.jpg)$/i;
       
             if(fileInput.files[0].size > 4400000){
@@ -93,10 +99,12 @@ function startVue(info, revised){
                     reader.onloadend = function() {
                         app.base64data = reader.result.split(',')[1];  
                         console.log(app.base64data); 
+                        setTimeout(app.uploadImage() , 10000)
+                        
                         } 
                 })  
             }//end else
-            this.uploadImage()   
+              
         },//end fileValidation  
         uploadImage: function (){
             console.log()
@@ -104,7 +112,8 @@ function startVue(info, revised){
                 type : 'POST',
                 data : {
                     unit : document.getElementById('unit').innerHTML, 
-                    b64String : app.base64data,                                       
+                    b64String : app.base64data,
+                    fileType : app.fileType                                       
                           
                 },
                 url : '/sendImage',    
@@ -123,6 +132,7 @@ function startVue(info, revised){
                 data : {
                     unit : document.getElementById('unit').innerHTML, 
                     obj : null,
+                    final : app.publish,
                     title : app.title, 
                     imageLink : app.imageLink,
                     stage : 5,                     

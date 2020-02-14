@@ -161,14 +161,18 @@ function startVue(newPlan, info, draft){
                 ['also' ,  /also are/i], 
 
                 ['no matter' ,  /no matter/i],
-                ['let' ,  /let/i],                              
+                ['let' ,  /let/i],
+                ['although' ,  /lthough/i],
+
             ]
             
             for (var fb in feedback) {
                 if (new_string.match(feedback[fb][1])){
                     this.control[idx].push(feedback[fb][0])
                 }                      
-            }    
+            }
+            
+            
             
             var commaCheck = string.split(',')
             var commas = commaCheck.length
@@ -255,7 +259,6 @@ function startVue(newPlan, info, draft){
                 }
             });
         },
-
         cancel: function(){
             alert('You have cancelled so your changes will not be saved')
             window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number         

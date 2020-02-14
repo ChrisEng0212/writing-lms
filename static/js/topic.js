@@ -55,8 +55,9 @@ function startVue(dataList, sources, stage){
                 console.log('WORK', work)
                 //cascading conditionals to fill up the lists   
                 if (work['info']['stage'] > 2) {
-                    if (this.pubs.length < 2 ) {
+                    if (this.pubs.length < 2 ) {                        
                         this.pubs.push(work)
+                        console.log('PUBLISH_LENGTH', this.plans.length)
                         continue
                     }                                        
                 }
