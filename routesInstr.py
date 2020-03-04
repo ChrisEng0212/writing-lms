@@ -12,7 +12,6 @@ from meta import BaseConfig
 s3_resource = BaseConfig.s3_resource  
 S3_LOCATION = BaseConfig.S3_LOCATION
 S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
-DESIGN = BaseConfig.DESIGN
 
 def loadAWS(file, unit):   
     if unit == 0 :
@@ -49,9 +48,9 @@ def courseCheck():
     file_content = content_object.get()['Body'].read().decode('utf-8')
     SOURCES = json.loads(file_content)   
     print(SOURCES)       
-    course = json.dumps(SOURCES['schedule'])     
-    color = json.dumps(DESIGN)    
-    return jsonify({'course' : course, 'color' : color})
+    course = json.dumps(SOURCES['schedule'])    
+     
+    return jsonify({'course' : course})
 
 
 @app.route("/course", methods = ['GET', 'POST'])

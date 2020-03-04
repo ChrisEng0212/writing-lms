@@ -3,12 +3,20 @@ import json
 import os
 
 try:
-    from aws import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SCHEMA
+    from aws import KEYS  
+    AWS_ACCESS_KEY_ID = KEYS.AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = KEYS.AWS_SECRET_ACCESS_KEY
+    SQLALCHEMY_DATABASE_URI = KEYS.SQLALCHEMY_DATABASE_URI
+    MAIL_PASSWORD = KEYS.MAIL_PASSWORD
+    SECRET_KEY = KEYS.SECRET_KEY
     DEBUG = True
+
 except: 
     AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID'] 
-    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY'] 
-    AWS_SCHEMA = os.environ['AWS_SCHEMA'] 
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']     
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
+    SECRET_KEY = os.environ['SECRET_KEY']
     DEBUG = False
 
 
@@ -20,32 +28,19 @@ s3_client = boto3.client('s3',
          aws_access_key_id=AWS_ACCESS_KEY_ID,
          aws_secret_access_key= AWS_SECRET_ACCESS_KEY)
 
-def loadJson():
-    content_object = s3_resource.Object(   'writing-lms', 'json_files/meta.json'  )    
-    file_content = content_object.get()['Body'].read().decode('utf-8')
-    meta = json.loads(file_content)  
-    return meta
 
 class BaseConfig:
-    META = loadJson()     
-
+    
     s3_resource = s3_resource
     s3_client = s3_client
 
-    SCHEMA = META['M']['SCHEMA']
-    DESIGN = META['M']['DESIGN']
-
-    IDLIST = META['C']
-
-    SECRET_KEY = META['S']['SECRET_KEY']
-    S3_LOCATION = META['S']['S3_LOCATION']
-    S3_BUCKET_NAME =  META['S']['S3_BUCKET_NAME']
+    SECRET_KEY = SECRET_KEY
+    S3_LOCATION = "https://writing-lms.s3.ap-northeast-1.amazonaws.com/"
+    S3_BUCKET_NAME = 'writing-lms'      
     AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
-    SQLALCHEMY_DATABASE_URI = META['S']['SQLALCHEMY_DATABASE_URI']    
-    MAIL_USERNAME = META['S']['MAIL_USERNAME']
-    MAIL_PASSWORD = META['S']['MAIL_PASSWORD']
-
+    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI      
+    MAIL_PASSWORD = MAIL_PASSWORD
     DEBUG = DEBUG
         
 

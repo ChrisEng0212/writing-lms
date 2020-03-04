@@ -13,9 +13,6 @@ s3_resource = BaseConfig.s3_resource
 S3_LOCATION = BaseConfig.S3_LOCATION
 S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
 
-
-
-IDLIST = BaseConfig.IDLIST
 # IN THIS FILE
 # STUDENTS 
 # ATT_TEAM

