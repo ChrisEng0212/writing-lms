@@ -83,8 +83,8 @@ def reset_token(token):
 
 @app.route("/register", methods=['GET','POST']) #and now the form accepts the submit POST
 def register():
-    flash('Website not started yet', 'danger') 
-    return redirect (url_for('about')) # redirect must be imported
+    #flash('Website not started yet', 'danger') 
+    #return redirect (url_for('about')) # redirect must be imported
     if current_user.is_authenticated:
         return redirect(url_for('home')) # now register or log in link just go back home
     form = RegistrationForm()
