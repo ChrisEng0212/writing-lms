@@ -1,0 +1,96 @@
+{        
+    "tips" : {
+        "very" : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
+        "also" : "https://docs.google.com/presentation/d/e/2PACX-1vSaRz0wI_qa8iyIujCJjtEC_M_gJZa7Fw0OLLJbW2_QoQ_yOrezSvn-bvid1m-gR6n1baN1UAptFRFZ/embed", 
+        "let"  : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
+        "no matter" : "https://docs.google.com/presentation/d/e/2PACX-1vQtQUX1hrwY1RwYr229bQcvYgMBOMrfat87pGfWEzxDreQjsBpuCf4rSXokvKehDuE7hNGCloqi2yM9/embed", 
+        "there" : "https://docs.google.com/presentation/d/e/2PACX-1vSmrj_CTJ1xQUF3hn-mnVg43kfGDLnQ9cJUyZUkCuduM-HiVmfTHnlPfxonAk5KqAbfX6o5OR5SeuPZ/embed", 
+        "commas" : "https://docs.google.com/presentation/d/e/2PACX-1vSRaq_OKjKXXlm44qAjnedKcOYZiIBdmF_omtzLKU-mj4i-Mjglq8AsZRCME_OTFtEdwDNlKTkMg4m-/embed", 
+        "words" : "https://docs.google.com/presentation/d/e/2PACX-1vRQw3jKPPhHLVMJc4u8ILXIHcQaihiVU-CgxKSmWLWpifLLuorKDAfoHJ7G1sDX7ZDvxRNxTv0AYFIf/embed", 
+        "although" : "https://docs.google.com/presentation/d/e/2PACX-1vRUWMaHsRDRBU84JPTScvGDfwvByPXMEKa0AiL1U3npEh4KSk0WlSdKQVGFKPXCLVtHYuqr0zhNfTCd/embed", 
+        "Intro"  : "https://docs.google.com/presentation/d/e/2PACX-1vRzO8mqA8oD7N2p1BCSCb-4KgUXtnZcayai2JqTkSsdpxfXcL9WozNoh4Yv0AUAoDH7s1qFzXqEzIq_/embed", 
+        "Structure" : "https://docs.google.com/presentation/d/e/2PACX-1vSAEgJxNqEHcCL0Q43mkiGzkVITGcVhNa90nL_jugy3NJ4Av22ydcnZFCZ9s1PipmBkAcHy8TtHBfUI/embed",  
+        "Closing" : "https://docs.google.com/presentation/d/e/2PACX-1vShLIQjSBDNgo-SZC7csptsZ-bbg7_1ERIHTo2lfJUgLNpPTysg596TwUwT68ZUUbvF0FxpPNWLrCBU/embed"  
+    },     
+    
+    "sources" : {
+        "01" : {
+            "Title" : "Topic 1",
+            "Date": "2020-03-12",
+            "Deadline": "2020-03-25",                  
+            "Set" : 1,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTYjLT9byPu1lyrCiaiAD4iCHGxwp_qHj8lUOjxF03Ua8zMr8nrjP_FyGz3AAWVdZoXJ7ZN7qdlYnqu/embed"
+        }, 
+        "02" : {
+            "Title" : "Topic 2", 
+            "Date": "2020-03-19",
+            "Deadline": "2020-04-01",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTYjLT9byPu1lyrCiaiAD4iCHGxwp_qHj8lUOjxF03Ua8zMr8nrjP_FyGz3AAWVdZoXJ7ZN7qdlYnqu/embed"
+        }, 
+        "03" : {
+            "Title" : "Topic 3", 
+            "Date": "2020-03-26",
+            "Deadline": "2020-04-01", 
+            "Set" : 0,                         
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }, 
+        "04" : {
+            "Title" : "Topic 4", 
+            "Date": "2020-04-16",
+            "Deadline": "2020-04-29",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }, 
+        "05" : {
+            "Title" : "Topic 5", 
+            "Date": "2020-4-23",
+            "Deadline": "2020-05-06",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }, 
+        "06" : {
+            "Title" : "Topic 6", 
+            "Date": "2020-05-07",
+            "Deadline": "2020-05-20",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }, 
+        "07" : {
+            "Title" : "Topic 7", 
+            "Date": "2020-05-14",
+            "Deadline": "2020-05-27",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }, 
+        "08" : {
+            "Title" : "Topic 8", 
+            "Date": "2020-05-21",
+            "Deadline": "2020-06-03", 
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        },
+        "09" : {
+            "Title" : "Topic 9", 
+            "Date": "2020-06-04",
+            "Deadline": "2020-06-17",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        },
+        "10" : {
+            "Title" : "Topic 10", 
+            "Date": "2020-06-11",
+            "Deadline": "2020-06-19",
+            "Set" : 0,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
+        }
+
+    }
+    
+    
+    
+
+    
+
+
+}
