@@ -49,7 +49,7 @@ def storeData():
     else:
         student = current_user.username
 
-    print('xxxxxxxxxxxxxx', stage, work, obj)
+    print('STAGE WORK OBJ', stage, work, obj)
     classModel = Info.ass_mods_dict[unit]
     entry = classModel.query.filter_by(username=student).first()
     info = json.loads(entry.info)
@@ -139,10 +139,16 @@ def sendImage():
 @app.route("/topic_list", methods = ['GET', 'POST'])
 @login_required
 def topic_list():
-    topDict = {}        
+    topDict = {}       
 
-    SOURCES = loadAWS('json_files/sources.json', 0)
-    sources = SOURCES['sources']
+    
+    with open('static/json_files/sources.json', 'r') as f:
+        srcJSON = json.load(f)
+        
+    sources = srcJSON['sources']
+
+    pprint(sources)
+
     for unit in sources:        
         src = sources[unit]       
         if src['Set'] == 1:

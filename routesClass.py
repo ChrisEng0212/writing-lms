@@ -177,14 +177,7 @@ def att_dash():
             openData.teamsize = form.teamsize.data 
             openData.teamcount = form.teamcount.data 
             openData.unit =  form.unit.data        
-            db.session.commit() 
-            if form.teamnumber.data == 100:
-                sourceCheck = Sources.query.filter_by(openSet='2').all()
-                #return to normal state after attendence closed
-                for sourceLine in sourceCheck:
-                    sourceLine.openReset = 0
-                    sourceLine.openSet = 1
-                    db.session.commit() 
+            db.session.commit()    
             
             flash('Attendance has been updated', 'secondary') 
             return redirect(url_for('att_team')) 

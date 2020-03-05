@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div id="vue-app">
+ 
+
+<div class="list-section" v-for="(week, key ) in course">
+    <h1> Week [[ key ]] </h1>
+
+    <template v-for="(val, name) in week">   
+    <div v-bind:style="style(name)">
+       <span style="color:white">  [[ name ]]: [[val]] </span>
+    </div>
+    
+    </template>   
+    <br> 
+
+</div>  
+
+
+</div> <!-- end of Vue app -->
+
+
+
+{% endblock %}
+
+
+
+
+{% block script %}   
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script type="text/javascript" src="{{url_for('static', filename= 'js/course.js')}}"></script>  
+{% endblock %} 

@@ -2,24 +2,19 @@
 
 {% block content %}
 
-<div class="content-section"> 
+<div class="list-section"> 
     <legend class="border-bottom mb-4">Controls</legend>   
 
 <button class="btn btn-outline-secondary"><a href="{{ url_for ('students')}}", target="_blank">Students</a></button>
 <button class="btn btn-outline-secondary"><a href="{{ url_for ('att_log')}}", target="_blank">Att_Log</a></button>
-<button class="btn btn-outline-secondary"><a href="{{ url_for ('purge')}}", target="_blank">Purge</a></button>
 <button class="btn btn-outline-secondary"><a href="{{ url_for ('teams') }}", target="_blank">Teams</a></button>
-<button class="btn btn-outline-secondary"><a href="{{ url_for ('sources') }}", target="_blank">Sources</a></button>
-<button class="btn btn-outline-secondary"><a href="{{ url_for ('admin') }}", target="_blank">Admin</a></button>
-<button class="btn btn-outline-secondary"><a href="{{ url_for ('dashboard') }}", target="_blank">Dashboard</a></button>
-<button class="btn btn-outline-secondary"><a href="{{ url_for ('MTGrades') }}", target="_blank">MidGrades</a></button>
 
 
 
 
 </div>
 
-<div class="content-section"> 
+<div class="list-section"> 
     <legend class="border-bottom mb-4">Attendance Set Up</legend>       
 
 <a href="../admin/attendance">Attendance</a>
@@ -32,47 +27,47 @@
         
         
             <div class="form-group"> 
-                {{ form.username.label (class="form-control-label")}}</br>                    
+                {{ form.username.label (class="form-control-label", style="color:white")}}</br>                    
                 {{ form.username(class="form-control form-control-lg")}}                 
             </div>
 
             <div class="form-group"> 
-                {{ form.studentID.label (class="form-control-label")}}</br>
+                {{ form.studentID.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.studentID(class="form-control form-control-lg")}}                     
             </div>
 
             <div class="form-group"> 
-                {{ form.attend.label (class="form-control-label")}}</br>
+                {{ form.attend.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.attend(class="form-control form-control-lg")}}                     
             </div> 
 
             Current Status: {{status}}
 
             <div class="form-group"> 
-                {{ form.teamnumber.label (class="form-control-label")}}</br>
+                {{ form.teamnumber.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.teamnumber(class="form-control form-control-lg")}}                     
             </div>               
 
             
             <div class="form-group"> 
-                {{ form.teamsize.label (class="form-control-label")}}</br>
+                {{ form.teamsize.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.teamsize(class="form-control form-control-lg")}}                     
             </div>  
 
             <div class="form-group"> 
-                {{ form.teamcount.label (class="form-control-label")}}</br>
+                {{ form.teamcount.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.teamcount(class="form-control form-control-lg")}}                     
             </div> 
 
             <div class="form-group"> 
-                {{ form.unit.label (class="form-control-label")}}</br>
+                {{ form.unit.label (class="form-control-label" , style="color:white")}}</br>
                 {{ form.unit(class="form-control form-control-lg")}}                     
             </div>    
 
 
         </fieldset> 
         <div class="form-group">
-                {{ form.submit(class="btn btn-outline-secondary")}}
+                {{ form.submit(class="btn btn-outline-secondary" , style="color:white")}}
         </div>
     </form>
 </div>

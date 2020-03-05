@@ -42,25 +42,24 @@ def about():
     return render_template('instructor/about.html', about=about, siteName=S3_BUCKET_NAME)
 
 
-@app.route('/courseCheck', methods=['POST'])
-def courseCheck():  
+def get_schedule():
     content_object = s3_resource.Object( S3_BUCKET_NAME, 'json_files/sources.json' )
-    file_content = content_object.get()['Body'].read().decode('utf-8')
-    SOURCES = json.loads(file_content)   
-    print(SOURCES)       
-    course = json.dumps(SOURCES['schedule'])    
-     
-    return jsonify({'course' : course})
+    file_content = content_object.get()['Body'].read().decode('utf-8')    
+    SOURCES = json.loads(file_content)  # json loads returns a dictionary
+    #print(SOURCES)   
+    return (SOURCES)
+
+
 
 
 @app.route("/course", methods = ['GET', 'POST'])
 @login_required
-def course(): 
+def course():  
+    # json dumps returns a string
+    course = json.dumps(get_schedule())   
+    color = current_user.theme
 
-
-    
-        
-    return render_template('instructor/course.html')
+    return render_template('instructor/course.html', course=course, color=color)
 
 
 @app.route('/upload/<string:assignment>', methods=['POST', 'GET'])
