@@ -29,7 +29,7 @@ def students():
     
     students = User.query.order_by(asc(User.studentID)).all()    
     
-    return render_template('instructor/students.html', students=students, title='students')  
+    return render_template('instructor/students.html', S3_LOCATION=S3_LOCATION, students=students, title='students')  
 
 
 ######## Attendance //////////////////////////////////////////////
