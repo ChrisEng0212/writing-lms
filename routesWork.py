@@ -31,6 +31,7 @@ def loadAWS(file, unit):
         jload = json.loads(file_content)
         print(type(jload))
     except:
+        print('AWS return NONE')
         jload = None
 
     return jload
@@ -139,8 +140,7 @@ def sendImage():
 @app.route("/topic_list", methods = ['GET', 'POST'])
 @login_required
 def topic_list():
-    topDict = {}       
-
+    topDict = {}   
     
     with open('static/json_files/sources.json', 'r') as f:
         srcJSON = json.load(f)
@@ -219,8 +219,11 @@ def topicCheck(unit):
     random.shuffle(dataList)    
       
 
-    SOURCES = loadAWS('json_files/sources.json', 0)
-    sources = json.dumps(SOURCES['sources'])    
+    with open('static/json_files/sources.json', 'r') as f:        
+        srcJSON = json.load(f)
+        
+        
+    sources = json.dumps(srcJSON['sources'])  
 
     #print('DATA', type(dataList), dataList)
     return jsonify({'dataList' : dataList, 'sources' : sources, 'stage' : stage})
@@ -270,12 +273,16 @@ def part(part, unit):
         'draft' : entry.draft,
         'revise' : entry.revise,
         'publish' : entry.publish,
-    }
+    }    
     
     #print(fullDict)
 
-    SOURCES = loadAWS('json_files/sources.json', 0)
-    sources = json.dumps(SOURCES['sources'])  
+    #SOURCES = loadAWS('json_files/sources.json', 0)
+    #sources = json.dumps(SOURCES['sources']) 
+    with open('static/json_files/sources.json', 'r') as f:
+        srcJSON = json.load(f)
+        
+    sources = json.dumps(srcJSON['sources']) 
     
     return render_template('work/' + part + '.html', unit=unit, fullDict=json.dumps(fullDict), sources=sources)
 

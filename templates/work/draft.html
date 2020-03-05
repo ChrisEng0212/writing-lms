@@ -22,9 +22,12 @@
             </div>  
 
             <div v-if="helper[key]">            
-                    <iframe :src="slides[key]"
-                        allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
-                    </iframe>                             
+                    
+                    <div class="frame-section embed-responsive embed-responsive-4by3">
+                        <iframe :src="slides[key]"
+                            allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+                        </iframe>
+                    </div>                             
             </div>  
 
             <textarea v-if="input.length > 0"  class="input3" v-bind:id="key" :ref="key" v-on:focus="selectText(key)" v-on:blur="deSelect(key, index)" v-model="input" ></textarea>

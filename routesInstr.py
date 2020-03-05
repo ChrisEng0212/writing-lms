@@ -49,7 +49,16 @@ def get_schedule():
     #print(SOURCES)   
     return (SOURCES)
 
+@app.route("/tips", methods = ['GET', 'POST'])
+@login_required
+def tips(): 
 
+    with open('static/json_files/sources.json', 'r') as f:
+        srcJSON = json.load(f)
+        
+    tips = json.dumps(srcJSON['tips']) 
+
+    return render_template('instructor/tips.html', tips=tips)
 
 
 @app.route("/course", methods = ['GET', 'POST'])

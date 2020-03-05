@@ -91,7 +91,7 @@ def register():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         n = str(random.randint(1,10))        
-        image_string = 'profiles/avatar' + n + '.png'        
+        image_string = 'profiles/avatar' + n + '.PNG'        
         
         user = User(username=form.username.data, studentID=form.studentID.data, email=form.email.data, 
         password = hashed_password, device=form.device.data, image_file=image_string, avatar=form.username.data)
