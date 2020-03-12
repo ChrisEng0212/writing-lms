@@ -14,7 +14,7 @@ console.log(fullOBJ)
 console.log(plan)
 console.log(sources)
 
-if (plan == null){
+if (plan['Topic'] == null){
     plan = {
         "Topic" : "",
         "Thesis": "", 
