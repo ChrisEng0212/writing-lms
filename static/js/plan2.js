@@ -1,20 +1,29 @@
 
 let unit_number = document.getElementById('unit').innerHTML
-console.log(unit_number)
+console.log('UNIT NUMBER', unit_number)
+
 let fullString = document.getElementById('fullDict').innerHTML
-
-let srcString = document.getElementById('sources').innerHTML
-
-let sources = JSON.parse(srcString)
-let slides = sources[unit_number]['Materials']  
 let fullOBJ = JSON.parse(fullString)
 let plan = JSON.parse(fullOBJ['plan']) 
+console.log('fullOBJ', fullOBJ)
+console.log('PLAN', plan)
 
-console.log(fullOBJ)
-console.log(plan)
+let srcString = document.getElementById('sources').innerHTML
+let sources = JSON.parse(srcString)
+let slides = sources[unit_number]['Materials']  
 console.log(sources)
 
-if (plan['Topic'] == null){
+
+Object.size = function(obj) {
+    var size = 0
+    for (key in obj) {
+        size += 1 
+    }
+    return size;
+};
+
+
+if (Object.size(plan) == 0 ){
     plan = {
         "Topic" : "",
         "Thesis": "", 
@@ -26,6 +35,8 @@ if (plan['Topic'] == null){
         "Details_3": "", 
     }
 }
+
+console.log('PLAN', plan);
 
 startVue(plan, slides)
 
@@ -98,27 +109,18 @@ function startVue(plan, slides){ new Vue({
             for(var key in this.planOBJ) {
                 if ( key.indexOf('Det') == 0 ) {
                     var detailsValue = this.planOBJ[key]
-                    if (Array.isArray(detailsValue)) {
-                        console.log('ARRAY ' + detailsValue)
-                    }
-                    // check details sections     
-                    // Lorum , Ipsum  
-                    else if (detailsValue.split(',').length <=1 ){
+                    if ( this.planOBJ[key] != '') {
+                        if (detailsValue.split(',').length <=1 ){
                         alert ('Please make sure you use commas " , " to seperate your details' )   
-                        return false                       
-                    }
-                    else{
-                        //replace details with [listed ideas]
-                        detailsList = detailsValue.split(',')
-                        console.log('UPDATE' + detailsList)
-                    } 
-                                
+                        return false 
+                        }                      
+                    }           
                 }
-                else if (this.planOBJ[key] == ''){
+                if (this.planOBJ[key] == ''){
                     alert('Warning! ' + key + ' is not complete yet, please comeback to finish it soon' )  
                     stage = 0                 
                 }  
-            }            
+            } 
             this.sendData(this.planOBJ, stage)
             alert('Please wait a moment while your writing is updating')    
         }, 

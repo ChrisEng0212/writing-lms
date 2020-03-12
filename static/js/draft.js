@@ -13,7 +13,16 @@ let plan = JSON.parse(fullOBJ['plan'])
 let draft = JSON.parse(fullOBJ['draft']) 
 
 let newPlan = ''
-if (plan['Topic'] == null){
+
+Object.size = function(obj) {
+    var size = 0
+    for (key in obj) {
+        size += 1 
+    }
+    return size;
+};
+
+if (Object.size(plan) == 0 ){
     console.log('No data')
     alert('You must complete your plan before you can start the writing')
     window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
@@ -27,8 +36,8 @@ else{
         4 : ["", ""]
     }
 }
-
-if (draft['Intro'] == null){
+console.log();
+if (Object.size(draft) == 0 ){
     draft = {
         "Intro" : "",
         "Part_1": "", 
