@@ -260,7 +260,14 @@ def part(part, unit):
             'image' : S3_LOCATION + current_user.image_file, 
             'stage' : 0
         }
-        entry = classModel(username=current_user.username, info=json.dumps(info))
+        # start assignment
+        entry = classModel(username=current_user.username, 
+        info=json.dumps(info), 
+        plan=json.dumps({}), 
+        draft=json.dumps({}), 
+        revise=json.dumps({}), 
+        publish=json.dumps({})
+        )
         db.session.add(entry)
         db.session.commit()
     
@@ -299,9 +306,11 @@ def dashboard():
         recDict[model] = {}
         print(recDict)
         for entry in Info.ass_mods_dict[model].query.all():           
-            recDict[str(model)][entry.username] = json.loads(entry.info)
-
-    
+            recDict[str(model)][entry.username] = {
+                'info' : json.loads(entry.info),
+                'plan' : json.loads(entry.plan),                 
+                'draft' : json.loads(entry.draft) 
+            }
     
 
     return  render_template('instructor/dashboard.html', recOBJ=str(json.dumps(recDict)))
@@ -316,7 +325,7 @@ def editor(student, unit):
     print(jString.draft)
     student_draft = json.loads(jString.draft)
 
-            
+    ## build the student text      
     text = ''
     for part in student_draft:
         text += student_draft[part]

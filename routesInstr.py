@@ -39,7 +39,7 @@ def home():
 @login_required 
 def about():   
 
-    return render_template('instructor/about.html', about=about, siteName=S3_BUCKET_NAME)
+    return render_template('instructor/about.html', siteName=S3_BUCKET_NAME)
 
 
 def get_schedule():

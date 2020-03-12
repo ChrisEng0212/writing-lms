@@ -72,6 +72,14 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+    def validate_studentID(self, studentID): 
+        try:
+            print(studentID.data)
+            int(studentID.data)
+            pass
+        except:
+            raise ValidationError('This should be your ID with no `s`') 
+
 class ForgotForm(FlaskForm):
     email = StringField ('Email', validators=[DataRequired(), Email()])         
     submit = SubmitField('Request Password Reset')

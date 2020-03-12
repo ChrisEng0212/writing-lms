@@ -21,6 +21,44 @@ S3_BUCKET_NAME = BaseConfig.S3_BUCKET_NAME
 # DISPLAY TEAMS
 # REMOVE STUDENTS 
 
+IDLIST = [
+    "120454064",
+"120454142",
+"120553048",
+"120554005",
+"120554051",
+"120554125",
+"120574026",
+"120654055",
+"120736507",
+"120812345",
+"120854002",
+"120854003",
+"120854005",
+"120854010",
+"120854011",
+"120854013",
+"120854017",
+"120854018",
+"120854019",
+"120854022",
+"120854026",
+"120854034",
+"120854037",
+"120854040",
+"120854047",
+"320839038",
+"320852205",
+"320852208",
+"320852209",
+"320852212",
+"320852215",
+"320852216",
+"320852217",
+"320852218",
+"320852221",
+]
+
 @app.route ("/students")
 @login_required 
 def students():
@@ -310,6 +348,155 @@ def studentRemove(name):
             
 
     return jsonify({'removed' : name, 'unit' : todaysUnit, 'idNum' : idNum})
+
+
+
+@app.route("/refreshAttend", methods = ['POST'])
+def get_attend_list():
+    if current_user.id != 1:
+        return abort(403) 
+
+    sDict = {}    
+    for s in IDLIST:
+        sDict[s] = {
+                'nme' : None, 
+                'img' : None,
+                'eml' : None,
+                'att' : 'Unregistered',           
+            }
+    
+    students = User.query.order_by(asc(User.studentID)).all() 
+    for student in students:  
+        if student.studentID not in IDLIST:
+            print (student.studentID)
+            sDict[student.studentID] = {
+                'nme' : None, 
+                'img' : None,
+                'eml' : None,
+                'att' : 'Unregistered',           
+            }
+        print('username', student.username)
+        sDict[student.studentID]['nme'] = student.username 
+        print('nme', sDict[student.studentID]['nme'])
+        sDict[student.studentID]['img'] = S3_LOCATION + student.image_file
+        sDict[student.studentID]['eml'] = student.email
+        sDict[student.studentID]['att'] = 'Absent'   
+            
+    #### attend todays attendance
+    attendance = Attendance.query.all()
+    for att in attendance: 
+        sDict[att.studentID]['att'] = att.attend
+    
+    if request.method == 'POST':
+        return jsonify({'attString' : json.dumps(sDict) })
+    else:
+        return json.dumps(sDict)
+      
+
+@app.route("/refreshTeams", methods = ['POST'])
+def get_team_list():
+    instructor = Attendance.query.filter_by(username='Chris').first()
+
+    if instructor.teamcount:
+        teamcount = instructor.teamcount
+    else:
+        teamcount = 0
+    
+    if teamcount > 0: 
+        attDict = {}  #  teamnumber = fields, 1,2,3,4 names
+        for i in range(1, teamcount+1):
+            teamCall = Attendance.query.filter_by(teamnumber=i).all()
+            print(teamCall)
+            teamCall_students = []
+            for s in teamCall:
+                teamCall_students.append(s.username)
+            attDict[i] = teamCall_students
+            print (teamCall_students)
+        
+        teamString = json.dumps(attDict) 
+    else:
+        teamString = json.dumps({ 1 : []})     
+    
+    if request.method == 'POST':
+        return jsonify({'teamString' : teamString })
+    else:
+        return teamString
+        
+
+@app.route("/updateSet", methods = ['POST'])
+@login_required
+def updateSet():
+    setOBJ = request.form['setOBJ']
+    
+    setDict = json.loads(setOBJ)
+
+    print('setDict', setDict)
+
+    notice = setDict['notice']
+    unit = setDict['unit']
+    teamcount = setDict['teamcount']
+    teamsize = setDict['teamsize']
+    set_mode = setDict['set_mode']
+
+    openData = Attendance.query.filter_by(username='Chris').first()
+
+    if int(set_mode) == 100:
+        db.session.query(Attendance).delete()
+        db.session.commit()
+        attendance = Attendance(username = 'Chris', 
+        attend='Notice', teamnumber=97, studentID='100000000')      
+        db.session.add(attendance)
+        db.session.commit()    
+    else:
+        openData.teamcount = int(teamcount)
+        openData.teamsize = int(teamsize)
+        openData.unit = unit
+        # notice and set mode are diff columns
+        openData.attend = notice
+        openData.teamnumber = int(set_mode)
+
+        db.session.commit() 
+      
+    
+    setDict = {
+        'Notice' : openData.attend,
+        'Set_mode' : openData.teamnumber,
+        'Unit' : openData.unit, 
+        'Size' : openData.teamsize, 
+        'Count' : openData.teamcount, 
+    }
+    
+    setString = json.dumps(setDict) 
+     
+
+    return jsonify({'teamcount' : teamcount, 'teamsize' : teamsize, 'setString' : setString})
+
+
+
+
+@app.route ("/controls")
+@login_required 
+def controls():
+
+    attend_list = get_attend_list()
+    team_list = get_team_list()   
+    
+
+    openData = Attendance.query.filter_by(username='Chris').first()
+
+    setDict = {
+        'Notice' : openData.attend,
+        'Set_mode' : openData.teamnumber,
+        'Unit' : openData.unit, 
+        'Size' : openData.teamsize, 
+        'Count' : openData.teamcount, 
+    }
+
+    setString = json.dumps(setDict)     
+
+
+    return render_template('instructor/controls.html', setString=setString, attend_list=attend_list, team_list=team_list, title='Controls') 
+
 
 
 

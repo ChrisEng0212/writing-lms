@@ -26,11 +26,11 @@
                <template v-for="(student, ky) in model"> 
                   <tr>
                      <td> [[ ky ]] </td> 
-                     <td> [[ student['stage'] ]] </td>
-                     <td> [[ student['plan_date_finish'] ]] </td>
-                     <td> [[ student['draft_date_finish'] ]] </td>
-                     <td v-if="student['stage'] == 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
-                     <td v-else-if="student['stage'] > 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td> [[ student['info']['stage'] ]] </td>
+                     <td> [[ student['info']['plan_date_finish'] ]] </td>
+                     <td> [[ student['info']['draft_date_finish'] ]] </td>
+                     <td v-if="student['info']['stage'] == 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
+                     <td v-else-if="student['info']['stage'] > 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
                      <td v-else @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;NOT YET&emsp;&emsp; </span> </td> 
                      <td @click="goToPlan(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;PLAN&emsp;&emsp; </span> </td> 
                   
@@ -55,7 +55,34 @@
 {% block script %}   
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-<script type="text/javascript" src="{{url_for('static', filename= 'js/dash.js')}}"></script>  
+<script type="text/javascript">
+
+
+let jString = document.getElementById('recs').innerHTML
+console.log(jString)
+const recOBJ = JSON.parse(jString)
+
+console.log(recOBJ)
+ 
+let app = new Vue({   
+
+    el: '#vue-app',
+    delimiters: ['[[', ']]'],      
+    data: {
+        recOBJ : recOBJ,
+       
+    }, 
+    methods: {
+        goToRevise : function (student, unit){
+            window.location = (window.location.href).split('dashboard')[0] + 'editor/' + student + '/' + unit  
+        }
+        
+    }
+    
+})// end NEW VUE
+
+
+</script>  
 
 
 {% endblock %} 
