@@ -326,18 +326,19 @@ def editor(student, unit):
     jStrings = model.query.filter_by(username=student).first()
     
       
+    sourceCode = None
+
 
     if jStrings.revise != '{}':
         student_revise = json.loads(jStrings.revise)
-        text = student_revise['html']
-        sourceCode = 'true' 
-    else:
-        student_draft = json.loads(jStrings.draft) 
-        ## build the student text      
-        text = ''
-        for part in student_draft:
-            text += student_draft[part]
-        sourceCode = 'false' 
+        sourceCode = student_revise['html']         
+           
+    student_draft = json.loads(jStrings.draft) 
+    ## build the student text      
+    text = ''
+    for part in student_draft:
+        text += student_draft[part]
+        
     
 
     return  render_template('instructor/editor.html', text=text, student=student, unit=unit, sourceCode=sourceCode)

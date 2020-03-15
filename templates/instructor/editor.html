@@ -31,8 +31,8 @@
 
 </div> <!-- end of Vue app -->
 
-<span id="text"> {{text}} </span>
-<span id="sourceCode"> {{sourceCode}} </span>
+<span id="text">{{text}}</span>
+<span id="sourceCode">{{sourceCode}}</span>
 
 
 {% endblock %}
@@ -40,11 +40,26 @@
 {% block script %} 
 
 
-<script type="text/javascript" >
-   editor.document.designMode = 'On'
+<script type="text/javascript">
+
    var text = document.getElementById('text').innerHTML
+   var sourceCode = document.getElementById('sourceCode').innerHTML
+
+   editor.document.designMode = 'On'
    editor.document.getElementsByTagName('body')[0].style = 'font-size:20px; font-family: "Arial", Arial, Sans-serif;'
-   editor.document.getElementsByTagName('body')[0].innerHTML = text
+   
+
+   // toggle if sourcecode != false
+   if (sourceCode != 'None'){ 
+      console.log('sourceCode:', sourceCode);
+      editor.document.getElementsByTagName('body')[0].innerHTML = sourceCode 
+      editor.document.getElementsByTagName('body')[0].innerHTML = editor.document.getElementsByTagName('body')[0].textContent       
+      }
+   else{
+      console.log('No sourceCode:', sourceCode);
+      editor.document.getElementsByTagName('body')[0].innerHTML = text
+   }
+   
 
    editor.addEventListener("keyup", function(event) {
       if (event.keyCode === 17) {
@@ -105,10 +120,7 @@ function sendData(){
 
 
 
-if (document.getElementById('sourceCode').innerHTML){
-   console.log('SET');
-   editor.document.getElementsByTagName('body')[0].innerHTML = editor.document.getElementsByTagName('body')[0].textContent       
-}
+
 
 var sourceCodeShowing = false
 
