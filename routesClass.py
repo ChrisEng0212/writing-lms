@@ -59,15 +59,73 @@ IDLIST = [
 "320852221",
 ]
 
-@app.route ("/students")
-@login_required 
-def students():
+
+def get_schedule():
+    content_object = s3_resource.Object( S3_BUCKET_NAME, 'json_files/sources.json' )
+    file_content = content_object.get()['Body'].read().decode('utf-8')    
+    SOURCES = json.loads(file_content)  # json loads returns a dictionary
+    #print(SOURCES)   
+    return (SOURCES)
+
+@app.route ("/att_log", methods = ['GET', 'POST'])
+@login_required
+def att_log():  
     if current_user.id != 1:
-        return abort(403)  
+        return abort(403)    
     
-    students = User.query.order_by(asc(User.studentID)).all()    
     
-    return render_template('instructor/students.html', S3_LOCATION=S3_LOCATION, students=students, title='students')  
+    ## create a list of all course dates    
+    course_dates = get_schedule()
+    #print(course_dates)
+    dateList = []
+    for c in course_dates:
+        print(c)
+        print(course_dates[c]['Date'])
+        date_string = course_dates[c]['Date']        
+        dateList.append(date_string)    
+    
+    print('dateList:', dateList)  
+
+
+    ### create a dictionary of all att_logs
+    userLogsDict = {}
+
+    # set up user dict for vue table
+    for number in IDLIST:
+        # make a new dateDict for each number
+        dateDict = {}
+        for date in dateList:
+            dateDict[date] = 0 
+
+        userLogsDict[number] = {
+            'user' : None, 
+            'dates' : dateDict, 
+            'grade' : 0 
+        }
+
+    # add data to user dict  
+    logs = AttendLog.query.all()  
+    for log in logs:
+
+        date = log.date_posted
+        print(date)
+        check = date.strftime("%Y-%m-%d")
+        print(check)
+        if check in dateList:
+            if log.studentID in userLogsDict:
+                print(log.username, log.studentID, userLogsDict[log.studentID]['dates'])
+                userLogsDict[log.studentID]['user'] = log.username
+                userLogsDict[log.studentID]['grade'] += log.attScore 
+                userLogsDict[log.studentID]['dates'][check] = 1
+                print(log.username, log.studentID, userLogsDict[log.studentID]['dates'])
+            else: 
+                print('ID check fail', log.username)
+        else:
+            print('Date not found')
+        
+    #print(userLogsDict)  
+    return render_template('instructor/att_log.html', title='att_log', logString=json.dumps(userLogsDict), dateString=json.dumps(dateList))  
+
 
 
 ######## Attendance //////////////////////////////////////////////
@@ -197,124 +255,6 @@ def att_team():
     return render_template('instructor/att_team.html', legend=legend, count=count, fields=fields, 
     teamcount=teamcount, form=form, notice=notice, users=users)  
 
-
-# set up the attendence for the day
-@app.route("/att_dash", methods = ['GET', 'POST'])
-@login_required
-def att_dash():
-    if current_user.id != 1:
-        return abort(403)
-    form = AttendInst()
-
-    openData = Attendance.query.filter_by(username='Chris').first()
-
-    if openData:    
-        if form.validate_on_submit():            
-            openData.attend = form.attend.data 
-            openData.teamnumber = form.teamnumber.data 
-            openData.teamsize = form.teamsize.data 
-            openData.teamcount = form.teamcount.data 
-            openData.unit =  form.unit.data        
-            db.session.commit()    
-            
-            flash('Attendance has been updated', 'secondary') 
-            return redirect(url_for('att_team')) 
-        else:
-            form.username.data = 'Chris'
-            form.studentID.data = '100000000'
-            try:
-                form.attend.data = openData.attend
-                form.teamnumber.data = openData.teamnumber
-                form.teamsize.data = openData.teamsize
-                form.teamcount.data = openData.teamcount
-                form.unit.data = openData.unit                
-            except: 
-                pass 
-    else:
-        flash('Attendance not started', 'secondary') 
-        return redirect(request.referrer)  
-
-    return render_template('instructor/att_dash.html', form=form, status=openData.teamnumber, title='controls')  
-
-# see historical attendance
-@app.route ("/att_log")
-@login_required
-def att_log():  
-    if current_user.id != 1:
-        return abort(403)
-    
-    IDLIST = IDLIST
-
-    ## create a list of all course dates
-    course = Course.query.order_by(asc(Course.date)).all()   
-    dateList = []
-    for c in course:
-        date = c.date
-        dateList.append(date.strftime("%m/%d"))    
-    print('dateList', dateList)   
-    
-    ## log all dates when attendance was complete (and show total att score)
-    attLogDict = {}    
-    for number in IDLIST:        
-        attLogDict[number] = []
-    for attLog in attLogDict:
-        logs = AttendLog.query.filter_by(studentID=str(attLog)).all() 
-        attGrade = 0        
-        if logs:                        
-            for log in logs:
-                d = log.date_posted
-                dStr = d.strftime("%m/%d")                
-                attLogDict[attLog].append(dStr) 
-                attGrade = attGrade + log.attScore
-            attLogDict[attLog].insert(0, attGrade) 
-        
-    print('attLogDict', attLogDict)
-
-    ##get names for all student IDs
-    userDict = {}
-    users = User.query.all()
-    for user in users:
-        userDict[int(user.studentID)] = user.username
-
-    today = datetime.now()
-    todayDate = today.strftime("%m/%d")  
-
-    return render_template('instructor/att_log.html', title='att_log', attLogDict=attLogDict, dateList=dateList, todayDate=todayDate, userDict=userDict)  
-
-
-# see teams
-@app.route ("/teams")
-@login_required 
-def teams():  
-    if current_user.id != 1:
-        return abort(403)       
-
-    try:
-        teamcount = Attendance.query.filter_by(username='Chris').first().teamcount
-    except:
-        flash('Attendance not open yet', 'danger')
-        return redirect(url_for('home')) 
-    
-    if teamcount > 0: 
-        attDict = {}  #  teamnumber = fields, 1,2,3,4 names
-        for i in range(1, teamcount+1):
-            teamCall = Attendance.query.filter_by(teamnumber=i).all()
-            attDict[i] = teamCall    
-    # if team count set to zero ---> solo joining
-    else:
-        attDict = {}
-        users = User.query.order_by(asc(User.studentID)).all()        
-        for user in users:
-            attStudent = Attendance.query.filter_by(username=user.username).first() 
-            if attStudent:
-                attDict[user.username] = [user.studentID, attStudent.date_posted]
-            else:
-                attDict[user.username] = [user.studentID, 0]
-    print(attDict)
-
-    tablesDict = {}
-    
-    return render_template('instructor/teams.html', attDict=attDict, teamcount=teamcount, title='teams')  
 
 
 # remove person from team and att_log

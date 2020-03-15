@@ -9,12 +9,15 @@
     <div class="list-section">
         <h1 style="display:inline"> Revise </h1> 
         <h1 id="unit" style="display:inline">{{unit}}</h1>
-        <br><br>  
+        <br><br> 
 
-        <div style="background:GAINSBORO; border-radius:5px">
+        <div style="background:GAINSBORO; border-radius:5px">   
+        <p class="unselectable" v-html="exampleHTML" align="justify" style="padding-left:8px; padding-right:8px;font-size:15px"> </p>
+        </div> 
 
-        <p v-html="revHTML" align="justify" style="padding-left:8px; padding-right:8px;font-size:15px"> </p>
 
+        <div style="background:GAINSBORO; border-radius:5px">   
+        <p class="unselectable" v-html="revHTML" align="justify" style="padding-left:8px; padding-right:8px;font-size:15px"> </p>
         </div> 
 
         <div>             

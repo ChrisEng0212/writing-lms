@@ -14,28 +14,41 @@
         <tbody>
             <template v-for="(model, unit) in recOBJ"> 
                <tr>
-               <td> [[ unit ]] </td> 
-               <td>  </td> 
-               <td>  </td> 
-               <td>  </td> 
-               <td>  </td>
-               <td>  </td>
-               <td>  </td>
+               <td @click="showUnit(unit)"> <span class="unit-span" style="color:hotpink"> &emsp;&emsp;[[ unit ]]&emsp;&emsp; </span> </td> 
+               <td >  </td> 
+               <td >  </td> 
+               <td>  </td>               
                </tr> 
 
-               <template v-for="(student, ky) in model"> 
+               <template v-if="show[unit]" v-for="(student, ky) in model"> 
                   <tr>
                      <td> [[ ky ]] </td> 
-                     <td> [[ student['info']['stage'] ]] </td>
+                     <td> <span @click="alertWork(student['plan'])" class="unit-span" :style="stageStyle[student['info']['stage']]">&emsp;[[ student['info']['stage'] ]]&emsp;</span> </td>
                      <td> [[ student['info']['plan_date_finish'] ]] </td>
-                     <td> [[ student['info']['draft_date_finish'] ]] </td>
-                     <td v-if="student['info']['stage'] == 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
-                     <td v-else-if="student['info']['stage'] > 2" @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span> </td> 
-                     <td v-else @click="goToRevise(ky, unit)"> <span class="unit-span" style="color:white"> &emsp;&emsp;NOT YET&emsp;&emsp; </span> </td> 
-                     <td @click="goToPlan(ky, unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;PLAN&emsp;&emsp; </span> </td> 
-                  
+                     <td> [[ student['info']['draft_date_finish'] ]] </td>                                      
                   </tr>
-               </template>     
+                 
+                        <tr v-if="student['info']['stage'] > 1">
+                                <td style="width:30%">
+                              
+                                    <template  v-for="(plan, head) in student['plan']">
+                                    <span class="unit-span" style="color:seagreen">[[ head ]]<span> [[plan]]</span> <br>   
+                                    </template>
+                     
+                                </td>                                
+                                <td colspan=3 >
+                                    <span @click="goToRevise(ky, unit)" class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span>
+                                    <br>
+                                    <template  v-for="(work, part) in student['draft']">                                    
+                                    [[ part ]] <br> [[ work ]] <br>   
+                                    </template>
+                                </td>
+                                                          
+                        </tr>
+                   
+
+                </template>    
+                   
                        
             </template>     
         </tbody>
@@ -48,7 +61,7 @@
 </div> <!-- end of Vue app -->
 
 
-<span id="recs" style="color:white"> {{recOBJ}} </span>
+<span id="recs" style="color:white;display:none"> {{recOBJ}} </span>
 
 {% endblock %}
 
@@ -64,20 +77,83 @@ const recOBJ = JSON.parse(jString)
 
 console.log(recOBJ)
  
-let app = new Vue({   
+let vue = new Vue({   
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],      
     data: {
         recOBJ : recOBJ,
+        show : {
+            '01' : false, 
+            '02' : false, 
+            '03' : false, 
+            '04' : false, 
+            '05' : false,           
+        },
+        work : {                   
+        },
+        stageStyle : { 
+            1 : {color: 'hotpink'}, 
+            2 : {color: 'limegreen'}, 
+            3 : {color: 'orange'}, 
+            4 : {color: 'cyan'}, 
+                            
+        },
+        
        
     }, 
     methods: {
         goToRevise : function (student, unit){
             window.location = (window.location.href).split('dashboard')[0] + 'editor/' + student + '/' + unit  
+        },
+        showUnit : function (unit){
+            console.log(vue.show[unit]);           
+           
+            if ( vue.show[unit] == true) {
+                vue.show[unit] = false
+            }
+            else{
+                 vue.show[unit] = true
+            }
+        },
+        showWork : function (student){
+            console.log(student, vue.work[student]);           
+           
+            if ( vue.work[student] ){
+                if ( vue.work[student] == true) {
+                   vue.work[student] = false
+                }             
+                else{
+                 vue.work[student] = true
+                }
+            }
+            else{
+                vue.work[student] = true
+            }
+        },
+        alertWork : function (obj){
+            alert(JSON.stringify(obj))
+        },
+        draftLength : function (obj){
+            var len = Object.keys(obj).length
+            console.log('length', len );
+            if (len == 5){
+                return true
+            }  
+            else{
+                return false
+            }          
+           
+        }, 
+        workCheck : function(ky){
+            return vue.work[ky]
         }
         
+    }, 
+    computed : {
+        
     }
+
     
 })// end NEW VUE
 

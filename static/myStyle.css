@@ -24,6 +24,14 @@ ul {
     width:100% !important
 }
 
+.unselectable { 
+    -webkit-user-select: none; 
+    -webkit-touch-callout: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+    } 
+
 
 .input1 {
     background-color : rgb(53, 12, 12); 

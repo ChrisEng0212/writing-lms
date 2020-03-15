@@ -309,7 +309,9 @@ def dashboard():
             recDict[str(model)][entry.username] = {
                 'info' : json.loads(entry.info),
                 'plan' : json.loads(entry.plan),                 
-                'draft' : json.loads(entry.draft) 
+                'draft' : json.loads(entry.draft),
+                'revise' : json.loads(entry.revise),
+                'publish' : json.loads(entry.publish),
             }
     
 
@@ -321,17 +323,24 @@ def editor(student, unit):
 
     model = Info.ass_mods_dict[unit]
     print(model)
-    jString = model.query.filter_by(username=student).first()
-    print(jString.draft)
-    student_draft = json.loads(jString.draft)
+    jStrings = model.query.filter_by(username=student).first()
+    
+      
 
-    ## build the student text      
-    text = ''
-    for part in student_draft:
-        text += student_draft[part]
+    if jStrings.revise != '{}':
+        student_revise = json.loads(jStrings.revise)
+        text = student_revise['html']
+        sourceCode = 'true' 
+    else:
+        student_draft = json.loads(jStrings.draft) 
+        ## build the student text      
+        text = ''
+        for part in student_draft:
+            text += student_draft[part]
+        sourceCode = 'false' 
     
 
-    return  render_template('instructor/editor.html', text=text, student=student, unit=unit)
+    return  render_template('instructor/editor.html', text=text, student=student, unit=unit, sourceCode=sourceCode)
 
 
 
