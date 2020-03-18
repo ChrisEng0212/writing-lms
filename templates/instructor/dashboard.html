@@ -26,9 +26,10 @@
                      <td> <span @click="alertWork(student['plan'])" class="unit-span" :style="stageStyle[student['info']['stage']]">&emsp;[[ student['info']['stage'] ]]&emsp;</span> </td>
                      <td> [[ student['info']['plan_date_finish'] ]] </td>
                      <td> [[ student['info']['draft_date_finish'] ]] </td>                                      
+                     <td> <span v-if="student['info']['stage'] > 1" @click="goToRevise(ky, unit)" class="unit-span" style="color:white"> &emsp;REVISE&emsp; </span> </td>                                      
                   </tr>
                  
-                        <tr v-if="student['info']['stage'] > 1">
+                        <tr v-if="student['info']['stage'] == 2">
                                 <td style="width:30%">
                               
                                     <template  v-for="(plan, head) in student['plan']">
@@ -36,11 +37,10 @@
                                     </template>
                      
                                 </td>                                
-                                <td colspan=3 >
-                                    <span @click="goToRevise(ky, unit)" class="unit-span" style="color:white"> &emsp;&emsp;REVISE&emsp;&emsp; </span>
+                                <td colspan=3 >                                    
                                     <br>
                                     <template  v-for="(work, part) in student['draft']">                                    
-                                    [[ part ]] <br> [[ work ]] <br>   
+                                    <span class="unit-span" style="color:orange">[[ part ]]<span> [[ work ]] <br>   
                                     </template>
                                 </td>
                                                           

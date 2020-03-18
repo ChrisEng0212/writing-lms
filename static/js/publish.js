@@ -5,19 +5,24 @@ console.log(unit_number)
 let fullString = document.getElementById('fullDict').innerHTML
 let fullOBJ = JSON.parse(fullString)
 let info = JSON.parse(fullOBJ['info']) 
-let revise = JSON.parse(fullOBJ['revise']) 
-let revised = revise['revised']
-let text = revise['text']
+
+
 let publish = JSON.parse(fullOBJ['publish']) 
 let imageLink = publish['imageLink']
 let title = publish['title']
 console.log(imageLink);
 
+// check revison has been done
+let revise = JSON.parse(fullOBJ['revise']) 
+
+let revised = revise['revised']
 if (revised == null){
     console.log('No data')
     alert('Please wait for instructors revision')
     window.location = (window.location.href).split('work')[0] + 'work/topic' + '/' + unit_number   
 }
+
+let text = revise['text']
 
 startVue(info, revised)
 
@@ -26,8 +31,8 @@ function startVue(info, revised){
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],
-    mounted : function (){
-        document.getElementById('final_image').scr = this.imageLink  
+    mounted : function (){        
+        document.getElementById('final_image').scr = this.imageLink 
     },     
     data: {
         publish : revised,       

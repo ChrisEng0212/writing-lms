@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from forms import *   
 from models import *
 from pprint import pprint
+from flask_mail import Message
 
 from meta import BaseConfig   
 s3_resource = BaseConfig.s3_resource 
@@ -87,7 +88,13 @@ def storeData():
         entry.info = json.dumps(info)
         entry.revise = json.dumps(dataDict)
         entry.grade = 3
-        db.session.commit() 
+        db.session.commit()
+        studentEmail = User.query.filter_by(username=student).first().email
+        msg = Message('Message from Writing LMS', 
+                sender='chrisflask0212@gmail.com', 
+                recipients=['cjx02121981@gmail.com', studentEmail ])
+        msg.body = 'Dear ' + student + ',/n Your writing draft for topic ' + unit + ' has been checked. Please move to the revise stage to see the correction and fix them before publishing./n Thanks,/n Chris'
+        mail.send(msg) 
 
     if work == 'revise':   
         info[work + "_date_finish"] = str(date.today())
@@ -193,18 +200,10 @@ def topicCheck(unit):
             stage = info['stage']
             print('CURRENT USER FOUND', current_user.username, stage)
         else:
-            try:
-                plan = json.loads(entry.plan)
-            except:
-                plan = {}
-            try:
-                draft = json.loads(entry.draft)
-            except:
-                draft = {}
-            try:
-                publish = json.loads(entry.publish)
-            except:
-                publish = {}
+            plan = json.loads(entry.plan)
+            draft = json.loads(entry.draft)
+            publish = json.loads(entry.publish)
+            
 
             entryDict = {
                 'info' : json.loads(entry.info),
@@ -304,7 +303,7 @@ def dashboard():
 
     for model in Info.ass_mods_dict:
         recDict[model] = {}
-        print(recDict)
+        #print(recDict)
         for entry in Info.ass_mods_dict[model].query.all():           
             recDict[str(model)][entry.username] = {
                 'info' : json.loads(entry.info),
@@ -323,11 +322,9 @@ def editor(student, unit):
 
     model = Info.ass_mods_dict[unit]
     print(model)
-    jStrings = model.query.filter_by(username=student).first()
-    
+    jStrings = model.query.filter_by(username=student).first()    
       
     sourceCode = None
-
 
     if jStrings.revise != '{}':
         student_revise = json.loads(jStrings.revise)
@@ -337,8 +334,7 @@ def editor(student, unit):
     ## build the student text      
     text = ''
     for part in student_draft:
-        text += student_draft[part]
-        
+        text += student_draft[part]       
     
 
     return  render_template('instructor/editor.html', text=text, student=student, unit=unit, sourceCode=sourceCode)
