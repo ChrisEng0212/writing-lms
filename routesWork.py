@@ -93,7 +93,7 @@ def storeData():
         msg = Message('Message from Writing LMS', 
                 sender='chrisflask0212@gmail.com', 
                 recipients=['cjx02121981@gmail.com', studentEmail ])
-        msg.body = 'Dear ' + student + ',/n Your writing draft for topic ' + unit + ' has been checked. Please move to the revise stage to see the correction and fix them before publishing./n Thanks,/n Chris'
+        msg.body = 'Dear ' + student + ',  Your writing draft for topic ' + unit + ' has been checked. Please move to the revise stage to see the correction and fix them before publishing. Thanks, Chris'
         mail.send(msg) 
 
     if work == 'revise':   
