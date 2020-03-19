@@ -12,6 +12,7 @@ let imageLink = publish['imageLink']
 let title = publish['title']
 console.log(imageLink);
 
+
 // check revison has been done
 let revise = JSON.parse(fullOBJ['revise']) 
 
@@ -31,8 +32,8 @@ function startVue(info, revised){
 
     el: '#vue-app',
     delimiters: ['[[', ']]'],
-    mounted : function (){        
-        document.getElementById('final_image').scr = this.imageLink 
+    mounted : function (){ 
+        document.getElementById('final_image').src = imageLink   
     },     
     data: {
         publish : revised,       
