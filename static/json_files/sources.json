@@ -25,16 +25,16 @@
             "Title" : "Topic 2", 
             "Date": "2020-03-19",
             "Deadline": "2020-04-01",
-            "Set" : 0,             
-            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTYjLT9byPu1lyrCiaiAD4iCHGxwp_qHj8lUOjxF03Ua8zMr8nrjP_FyGz3AAWVdZoXJ7ZN7qdlYnqu/embed"
+            "Set" : 1,             
+            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vSirXjqpvDhpijUxsaXBzwR2vIZzgrKKZBKpAe8MdMbZIIbWYyFn1277vHPTYQWqUwDs49wv7d7ehEj/embed"
         }, 
         "03" : {
             "Title" : "Topic 3", 
             "Date": "2020-03-26",
             "Deadline": "2020-04-01", 
             "Set" : 0,                         
-            "Materials" : "https://docs.google.com/presentation/d/e/2PACX-1vTcrvM_dx55a0ksP2xipD9YZ5rvxYyuHa3Qw6a6Bm5TvxEu5TKX1jC1uCb5_Z-2jomR-O_RQ_7p1Afv/embed"
-        }, 
+            "Materials" : ""
+           }, 
         "04" : {
             "Title" : "Topic 4", 
             "Date": "2020-04-16",
