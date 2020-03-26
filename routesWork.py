@@ -298,6 +298,8 @@ def part(part, unit):
 @app.route("/dashboard", methods = ['GET', 'POST'])
 @login_required
 def dashboard():
+    if current_user.id != 1:
+        return redirect(url_for('home'))
 
     recDict = {} 
 
@@ -312,13 +314,14 @@ def dashboard():
                 'revise' : json.loads(entry.revise),
                 'publish' : json.loads(entry.publish),
             }
-    
 
     return  render_template('instructor/dashboard.html', recOBJ=str(json.dumps(recDict)))
 
 @app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
 @login_required
 def editor(student, unit):
+    if current_user.id != 1:
+        return redirect(url_for('home'))
 
     model = Info.ass_mods_dict[unit]
     print(model)
@@ -334,7 +337,7 @@ def editor(student, unit):
     ## build the student text      
     text = ''
     for part in student_draft:
-        text += student_draft[part]       
+        text += (student_draft[part] + ' ' )     
     
 
     return  render_template('instructor/editor.html', text=text, student=student, unit=unit, sourceCode=sourceCode)

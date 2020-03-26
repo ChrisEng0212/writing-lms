@@ -62,6 +62,9 @@ Teamsize
 <a href='https://hrapp.just.edu.tw/hr_personal/Default.aspx'>Personnel</a> 
 &nbsp
 &nbsp
+<br> 
+<br> 
+<button class="btn btn-outline-secondary" @click="attOBJ()"> GET RECORDS </button>
     
 </div>
 
@@ -172,12 +175,30 @@ let vue = new Vue({
         deleteMode : false,
         unit_list : ['RR','00', '01','02','03','04','05','06','07','08','09', '10'],       
         size_list : ['4','0', '3','5'] ,   
-        team_list : ['5','6', '7','8','9', '10','11','12','13','14','15','16','17','18','19','20'],       
+        team_list : ['5','6', '7','8','9', '10','11','12','13','14','15','16','17','18','19','20'],
+        recordOBJ : {}       
     }, 
     methods: {   
+        attOBJ: function(schema) {
+          var time1 = '_8_1'
+          var time2 = '_9_1'
+
+          for (var student in vue.attendOBJ){            
+            if (vue.attendOBJ[student]['att'] == 'Absent'){              
+              vue.recordOBJ[student] = ['DDList' + student + time1, 'DDList' + student + time2]
+            }
+            if (vue.attendOBJ[student]['att']  == 'Unregistered'){
+              vue.recordOBJ[student] = ['DDList' + student + time1, 'DDList' + student + time2]
+            }
+          }
+
+          console.log('var obj =' + JSON.stringify(vue.recordOBJ));
+          var string = 'for (var student in obj){ if (document.getElementById(obj[student][0])){ document.getElementById(obj[student][0]).checked=true; document.getElementById(obj[student][1]).checked=true}}'
+          console.log(string);
+        },
         setAtt: function() { 
           
-          this.setOBJ['notice'] = document.getElementById('unit').value
+          this.setOBJ['notice'] = document.getElementById('notice').value
           // vanila js
           var e = document.getElementById('unit')
           this.setOBJ['unit'] = e.options[e.selectedIndex].value
@@ -197,7 +218,7 @@ let vue = new Vue({
             })
             .done(function(data) {
               vue.setOBJ = JSON.parse(data.setString) 
-              alert('Attendance Updated: count ' + data.teamcount)                
+              alert('Attendance Updated: STATUS ' + data.set_mode)                
             })
             .fail(function(){
                 alert('error has occurred');
@@ -276,9 +297,9 @@ let vue = new Vue({
           .fail(function(){
                 alert('error has occurred');
           });
-        }                  
-    }, 
-    computed : {
+        } 
+      }, 
+      computed : {
       deleteClass: function() {          
           if (this.deleteMode == true ){
             return 'btn btn-sm btn-danger'
