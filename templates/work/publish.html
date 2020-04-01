@@ -22,7 +22,7 @@
 
         <textarea class="input3" id="title" @focus="selectText('title')" @blur="deSelect('title', '0')" v-model="title"></textarea>
         
-        <h1 v-model="title">[[ title ]]<h1>
+        <h1 v-model="title">[[ title ]]</h1>
 
         <img class="rounded-circle chat-img" style="display:inline-block" :src="info['image']"> 
         <span :style="theme"> Written by [[  info['avatar']  ]]  </span>

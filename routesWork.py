@@ -317,6 +317,24 @@ def dashboard():
 
     return  render_template('instructor/dashboard.html', recOBJ=str(json.dumps(recDict)))
 
+@app.route("/published_work", methods = ['GET', 'POST'])
+@login_required
+def published():    
+
+    recDict = {} 
+
+    for model in Info.ass_mods_dict:
+        recDict[model] = {}
+        #print(recDict)
+        for entry in Info.ass_mods_dict[model].query.all():           
+            recDict[str(model)][entry.username] = {
+                'info' : json.loads(entry.info),               
+                'publish' : json.loads(entry.publish),
+            }
+
+    return  render_template('instructor/published_work.html', recOBJ=str(json.dumps(recDict)))
+
+
 @app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
 @login_required
 def editor(student, unit):
@@ -326,21 +344,17 @@ def editor(student, unit):
     model = Info.ass_mods_dict[unit]
     print(model)
     jStrings = model.query.filter_by(username=student).first()    
-      
-    sourceCode = None
 
-    if jStrings.revise != '{}':
-        student_revise = json.loads(jStrings.revise)
-        sourceCode = student_revise['html']         
-           
+    student_revise = jStrings.revise
+    student_plan = jStrings.plan
+    
     student_draft = json.loads(jStrings.draft) 
     ## build the student text      
     text = ''
     for part in student_draft:
         text += (student_draft[part] + ' ' )     
     
-
-    return  render_template('instructor/editor.html', text=text, student=student, unit=unit, sourceCode=sourceCode)
+    return  render_template('instructor/editor.html', text=text, student=student, unit=unit, student_revise=student_revise, student_plan=student_plan)
 
 
 
