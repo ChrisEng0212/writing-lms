@@ -81,7 +81,9 @@ function startVue(newPlan, info, draft){
             'no matter' : false, 
             there : false, 
             commas : false, 
-            words : false
+            words : false,
+            space : false,
+            although : false
         },
         slides : {
             very : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
@@ -97,6 +99,7 @@ function startVue(newPlan, info, draft){
             Part_2 : "https://docs.google.com/presentation/d/e/2PACX-1vSAEgJxNqEHcCL0Q43mkiGzkVITGcVhNa90nL_jugy3NJ4Av22ydcnZFCZ9s1PipmBkAcHy8TtHBfUI/embed",  
             Part_3 : "https://docs.google.com/presentation/d/e/2PACX-1vSAEgJxNqEHcCL0Q43mkiGzkVITGcVhNa90nL_jugy3NJ4Av22ydcnZFCZ9s1PipmBkAcHy8TtHBfUI/embed",  
             Closing : "https://docs.google.com/presentation/d/e/2PACX-1vShLIQjSBDNgo-SZC7csptsZ-bbg7_1ERIHTo2lfJUgLNpPTysg596TwUwT68ZUUbvF0FxpPNWLrCBU/embed",  
+            space : "https://docs.google.com/presentation/d/e/2PACX-1vShLIQjSBDNgo-SZC7csptsZ-bbg7_1ERIHTo2lfJUgLNpPTysg596TwUwT68ZUUbvF0FxpPNWLrCBU/embed",  
         },
         helper : {
             Intro : false, 
@@ -170,7 +173,10 @@ function startVue(newPlan, info, draft){
                 ['also' ,  /also are/i], 
 
                 ['no matter' ,  /no matter/i],
-                ['let' ,  /let/i],
+                ['let' ,  /\slet\s/i],                              
+                //['space' ,  /\s./i],                              
+                //['space' ,  /\s,/i],   
+                //http://www.regular-expressions.info/lookaround.html                           
                 ['although' ,  /lthough/i],
 
             ]
