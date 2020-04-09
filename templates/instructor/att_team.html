@@ -90,12 +90,14 @@
 <button type="button" class="btn btn-lg" style="background:{{titleColor}}; color:white"  disabled >Team: {{fields.teamnumber}}</button>	
 </br>
 </br>
-<h5>Your Team Members:</h5>
-<ul class="list-group list-group-flush" stlye="background:grey">
+
+    <h5>Your Team Members:</h5>
+
     {% for user in users %}
-    <li class="list-group-item"><img class="rounded-circle chat-img" src="{{users[user][1]}}"> {{users[user][0]}}</li>
+    <h3><img class="rounded-circle chat-img" src="{{users[user][1]}}"> {{users[user][0]}}</h3>
     {% endfor %}
-</ul>
+
+
 </br>
 
 

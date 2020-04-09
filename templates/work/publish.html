@@ -20,6 +20,7 @@
         <br>
         <span> Add your Title --></span>
 
+        <h5 style="color:tomato"> REMEMBER: A title uses capital letter for the main words eg (How to Write a Good Title) </h5>
         <textarea class="input3" id="title" @focus="selectText('title')" @blur="deSelect('title', '0')" v-model="title"></textarea>
         
         <h1 v-model="title">[[ title ]]</h1>
@@ -31,7 +32,7 @@
         <br> 
 
         <div style="background:darkslategrey; border-radius:5px">
-        <p style="padding-left:8px; padding: 10px ;font-size:16px" v-model="publish"> [[ publish ]] </p>
+        <p style="color:white; padding-left:8px; padding: 10px ;font-size:16px" v-model="publish"> [[ publish ]] </p>
         </div> 
 
         <h6> Check your writing and make any last minute changes below </h6>
