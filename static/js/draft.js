@@ -75,15 +75,15 @@ function startVue(newPlan, info, draft){
             4 : []
             }, 
         btn_control : {
-            very : false, 
-            also : false, 
-            let  : false, 
-            'no matter' : false, 
-            there : false, 
-            commas : false, 
-            words : false,
-            space : false,
-            although : false
+            very : true, 
+            also : true, 
+            let  : true, 
+            'no matter' : true, 
+            there : true, 
+            commas : true, 
+            words : true,
+            spaces : true,
+            although : true
         },
         slides : {
             very : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
@@ -99,7 +99,7 @@ function startVue(newPlan, info, draft){
             Part_2 : "https://docs.google.com/presentation/d/e/2PACX-1vSAEgJxNqEHcCL0Q43mkiGzkVITGcVhNa90nL_jugy3NJ4Av22ydcnZFCZ9s1PipmBkAcHy8TtHBfUI/embed",  
             Part_3 : "https://docs.google.com/presentation/d/e/2PACX-1vSAEgJxNqEHcCL0Q43mkiGzkVITGcVhNa90nL_jugy3NJ4Av22ydcnZFCZ9s1PipmBkAcHy8TtHBfUI/embed",  
             Closing : "https://docs.google.com/presentation/d/e/2PACX-1vShLIQjSBDNgo-SZC7csptsZ-bbg7_1ERIHTo2lfJUgLNpPTysg596TwUwT68ZUUbvF0FxpPNWLrCBU/embed",  
-            space : "https://docs.google.com/presentation/d/e/2PACX-1vShLIQjSBDNgo-SZC7csptsZ-bbg7_1ERIHTo2lfJUgLNpPTysg596TwUwT68ZUUbvF0FxpPNWLrCBU/embed",  
+            spaces : "https://docs.google.com/presentation/d/e/2PACX-1vSUcZl4Q5psylypgyleZNWsPN9N6AcP4TsldRLVmIgFDAyB5oMW8gkNOygkrGBeVWWc80HclXSb2VQD/embed",  
         },
         helper : {
             Intro : false, 
@@ -173,9 +173,7 @@ function startVue(newPlan, info, draft){
                 ['also' ,  /also are/i], 
 
                 ['no matter' ,  /no matter/i],
-                ['let' ,  /\slet\s/i],                              
-                //['space' ,  /\s./i],                              
-                //['space' ,  /\s,/i],   
+                ['let' ,  /\slet\s/i],  
                 //http://www.regular-expressions.info/lookaround.html                           
                 ['although' ,  /lthough/i],
 
@@ -190,12 +188,43 @@ function startVue(newPlan, info, draft){
             
             
             var commaCheck = string.split(',')
+            console.log('Comma', commaCheck);            
             var commas = commaCheck.length
             var periodCheck = string.split('.')
             var periods = periodCheck.length
             if (commas > periods * 1.8 ) {      
                 this.control[idx].push('commas')
-            }  
+            } 
+            
+            for (var cLine in commaCheck){
+                console.log(commaCheck[cLine])
+                if (cLine != 0){ 
+                    if (commaCheck[cLine][0] != ' '){
+                        console.log('space issue');
+                        if (this.control[idx].includes('spaces') ){
+                            console.log('pass');
+                        }
+                        else{
+                            this.control[idx].push('spaces')
+                        }
+                    }
+                }
+            }
+            for (var pLine in periodCheck){
+                console.log(periodCheck[pLine])
+                if (pLine != 0){ 
+                    if (periodCheck[pLine][0] != ' '){
+                        console.log('space issue');
+                        if (this.control[idx].includes('spaces') ){
+                            console.log('pass');
+                        }
+                        else{
+                            this.control[idx].push('spaces')
+                        }
+                        
+                    }
+                }
+            }
             
             var wordCheck = string.split(' ')
             var words = wordCheck.length
