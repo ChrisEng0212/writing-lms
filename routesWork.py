@@ -60,11 +60,11 @@ def storeData():
         if int(stage) == 0: 
             info[work + "_date_start"] = str(date.today())           
         if int(stage) == 1:            
-            info[work + "_date_finish"] = str(date.today())
-        info['stage'] = stage
+            info[work + "_date_finish"] = str(date.today())        
+            info['stage'] = 2
+            entry.grade = stage
         entry.info = json.dumps(info)
-        entry.plan = obj
-        entry.grade = stage
+        entry.plan = obj        
         db.session.commit() 
 
     if work == 'draft':        
@@ -72,7 +72,7 @@ def storeData():
             info[work + "_date_start"] = str(date.today())           
         if int(stage) == 2:            
             info[work + "_date_finish"] = str(date.today())
-        info['stage'] = stage
+            info['stage'] = 2
         entry.info = json.dumps(info)
         entry.draft = obj
         entry.grade = stage
@@ -98,12 +98,14 @@ def storeData():
 
     if work == 'revise':   
         info[work + "_date_finish"] = str(date.today())
-        info['stage'] = stage
+        
+        if info['stage'] == 3:
+            info['stage'] == 4
+            entry.grade = 4
         entry.info = json.dumps(info)
         dataDict = json.loads(entry.revise)
-        dataDict['revised'] = obj ## actuall a string
-        entry.revise = json.dumps(dataDict)
-        entry.grade = 4
+        dataDict['revised'] = obj ## actual a string
+        entry.revise = json.dumps(dataDict)        
         db.session.commit() 
     
     if work == 'publish':   
