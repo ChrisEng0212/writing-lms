@@ -19,8 +19,9 @@
       <div align="center">
       <template v-for="(toggle, key) in buttons" align="center">
       
-      <button v-if="toggle" type="button" class="btn btn-outline-light" style="width:24%;margin-left:1px" @click="goTo(key)"> [[ key ]]</button>
-      <button v-else type="button" class="btn btn-outline-light" style="width:24%; color:tomato;margin-left:1px"> [[ key ]]</button>
+          <button v-if="toggle == 2" type="button" class="btn btn-outline-light" style="width:24%;margin-left:1px" @click="goTo(key)"> [[ key ]]</button>
+          <button v-else-if="toggle == 0"  type="button" class="btn btn-outline-light" style="width:24%; color:tomato;margin-left:1px"> [[ key ]]</button>
+          <button v-else-if="toggle == 1"  type="button" class="btn btn-outline-light" style="width:24%; color:mediumseagreen;margin-left:1px"> [[ key ]]</button>
 
       </template>
       </div> 
@@ -66,5 +67,134 @@
 
 {% block script %}  
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-<script type="text/javascript" src="{{url_for('static', filename= 'js/topic.js')}}"></script>  
+<script type="text/javascript">
+
+let unit_number = document.getElementById('unit').innerHTML
+console.log(unit_number)
+
+$.ajax({    
+    type : 'POST',
+    url : '/topicCheck/' + unit_number   
+})
+.done(function(data) { 
+         
+    if (data) {         
+        let dataList = data.dataList // this is a list so cannot Jparse
+        let sources = JSON.parse(data.sources)
+        let stage = data.stage
+        console.log(dataList, typeof(dataList)) 
+        console.log(stage, typeof(stage));  
+
+        startVue(dataList, sources, stage)
+    }
+    else{
+        console.log('ERROR OCCURRED');
+    }
+});
+
+
+function startVue(dataList, sources, stage){ 
+    var app = new Vue({   
+
+    el: '#vue-app',
+    mounted: function(){
+        this.loadData(dataList)
+        this.setStage(parseInt(stage))           
+    },
+    delimiters: ['[[', ']]'],  
+    data: {
+        dataList : dataList, 
+        slides : sources[unit_number]['Materials'], 
+        deadline : sources[unit_number]['Deadline'], 
+        stage : stage, 
+        pubs : [], 
+        drafts : [], 
+        plans : [],   
+        buttons : {
+            plan : 2, 
+            draft : 0, 
+            revise : 0, 
+            publish : 0
+        }
+
+                      
+    }, 
+    methods: {
+        loadData: function(dataList){
+            for (obj in dataList) {
+                var work =  JSON.parse(dataList[obj])
+                console.log('WORK', work)
+                //cascading conditionals to fill up the lists   
+                if (work['info']['stage'] > 2) {
+                    if (this.pubs.length < 2 ) {                        
+                        this.pubs.push(work)
+                        console.log('PUBLISH_LENGTH', this.plans.length)
+                        continue
+                    }                                        
+                }
+                if (work['info']['stage'] > 1) {
+                    if (this.drafts.length < 2 ) {
+                        this.drafts.push(work)
+                        console.log('PLAN_LENGTH', this.drafts.length)
+                        console.log(this.draft);
+                        continue
+                    }                    
+                }
+                if (work['info']['stage'] > 0){
+                    if (this.plans.length < 2 ) {
+                        console.log('DRAFTS_LENGTH', this.plans.length)
+                        console.log(this.plans);
+                        this.plans.push(work)
+                        continue
+                     }                       
+                }  
+                
+                
+                console.log('Not added ', work);             
+                
+            }// end for
+
+        }, 
+        color: function(theme){
+            return  { color: theme }
+        },
+        goTo: function(work){           
+            window.location = (window.location.href).split('work')[0] + 'work/' + work + '/' + unit_number
+        },
+    
+        setStage: function(stage){            
+            if (stage == 1) {                        
+                this.buttons['draft'] = 2
+            } 
+            if (stage == 2) {                        
+                this.buttons['draft'] = 2
+            } 
+            if (stage == 3) {                        
+                this.buttons['plan'] = 1
+                this.buttons['draft'] = 1
+                this.buttons['revise'] = 2
+            } 
+            if (stage == 4) {
+                this.buttons['plan'] = 1
+                this.buttons['draft'] = 1
+                this.buttons['revise'] = 1
+                this.buttons['publish'] = 2
+            } 
+            if (stage == 5 ) {
+                this.buttons['plan'] = 1
+                this.buttons['draft'] = 1
+                this.buttons['revise'] = 1
+                this.buttons['publish'] = 2
+            }
+
+        }
+                  
+    }     
+
+    
+})// end NEW VUE
+
+}
+
+</script>  
 {% endblock %} 
