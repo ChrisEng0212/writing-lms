@@ -97,15 +97,18 @@ def storeData():
         mail.send(msg) 
 
     if work == 'revise':   
+        print(student)
         info[work + "_date_finish"] = str(date.today())
         
-        if info['stage'] == 3:
-            info['stage'] == 4
+        if int(info['stage']) == 3:
+            info['stage'] = 4
             entry.grade = 4
         entry.info = json.dumps(info)
+        print(entry.info)
         dataDict = json.loads(entry.revise)
-        dataDict['revised'] = obj ## actual a string
-        entry.revise = json.dumps(dataDict)        
+        dataDict['revised'] = obj ## actually a string
+        entry.revise = json.dumps(dataDict) 
+        print(entry.revise)       
         db.session.commit() 
     
     if work == 'publish':   
