@@ -61,7 +61,7 @@ def storeData():
             info[work + "_date_start"] = str(date.today())           
         if int(stage) == 1:            
             info[work + "_date_finish"] = str(date.today())        
-            info['stage'] = 2
+            info['stage'] = 1
             entry.grade = stage
         entry.info = json.dumps(info)
         entry.plan = obj        
