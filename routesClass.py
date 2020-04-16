@@ -163,7 +163,7 @@ def att_team():
     # set up page data 
     teamcount = openData.teamcount
     teamsize = openData.teamsize 
-    print('teamsizexxxxxxxx', teamsize) 
+    print('TEAMSIZE: ', teamsize) 
     notice = openData.attend     
 
     # set up student data   
@@ -252,8 +252,18 @@ def att_team():
                 else: 
                     pass
     
+    try:
+        with open('static/json_files/sources.json', 'r') as f:
+            srcJSON = json.load(f)
+        print(srcJSON)
+        documents = srcJSON['documents']        
+        document = documents[str(fields.teamnumber)]
+        video = documents['video']
+    except:
+        document = None
+
     return render_template('instructor/att_team.html', legend=legend, count=count, fields=fields, 
-    teamcount=teamcount, form=form, notice=notice, users=users)  
+    teamcount=teamcount, form=form, notice=notice, users=users, document=document, video=video)  
 
 
 
