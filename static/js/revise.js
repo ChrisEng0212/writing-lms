@@ -2,10 +2,6 @@
 let unit_number = document.getElementById('unit').innerHTML
 console.log(unit_number)
 
-
-
-
-
 $.ajax({    
     type : 'POST',
     url : '/getHTML/' + unit_number   
