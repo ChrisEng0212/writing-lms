@@ -261,6 +261,7 @@ def att_team():
         video = documents['video']
     except:
         document = None
+        video = None 
 
     return render_template('instructor/att_team.html', legend=legend, count=count, fields=fields, 
     teamcount=teamcount, form=form, notice=notice, users=users, document=document, video=video)  
