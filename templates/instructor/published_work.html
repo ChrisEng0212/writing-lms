@@ -21,7 +21,7 @@
                <template v-if="show[unit]" v-for="(work, student) in model"> 
                     <div v-if="work['info']['stage'] == 5">
                         <h1>[[ work['publish']['title']  ]]</h1>
-                        <img class="rounded img-fluid" id="final_image" alt="No file yet" style="width:400px"  :src="work['publish']['imageLink']"> 
+                        <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-height:200px"  :src="work['publish']['imageLink']"> 
                       <br> 
                       <br> 
                       <img class="rounded-circle chat-img" style="display:inline-block" :src="work['info']['image']"> 
