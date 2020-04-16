@@ -200,7 +200,7 @@ function startVue(newPlan, info, draft){
                 console.log(commaCheck[cLine])
                 if (cLine != 0){ 
                     if (commaCheck[cLine][0] != ' '){
-                        console.log('space issue');
+                        console.log('space issue: cLine', cLine);
                         if (this.control[idx].includes('spaces') ){
                             console.log('pass');
                         }
@@ -210,18 +210,20 @@ function startVue(newPlan, info, draft){
                     }
                 }
             }
+
             for (var pLine in periodCheck){
                 console.log(periodCheck[pLine])
                 if (pLine != 0){ 
                     if (periodCheck[pLine][0] != ' '){
-                        console.log('space issue');
-                        if (this.control[idx].includes('spaces') ){
-                            console.log('pass');
-                        }
-                        else{
-                            this.control[idx].push('spaces')
-                        }
-                        
+                        console.log('space issue: pLine', pLine);
+                        if (pLine != periodCheck.length - 1){
+                            if (this.control[idx].includes('spaces') ){
+                                console.log('pass');
+                            }
+                            else{
+                                this.control[idx].push('spaces')
+                            }
+                        }   
                     }
                 }
             }
