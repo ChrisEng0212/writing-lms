@@ -236,13 +236,20 @@ def topicCheck(unit):
 @app.route('/getHTML/<string:unit>', methods=['POST'])
 def getHTML(unit):
     print('GET HTML ACTIVE')
+
+    try: 
+        name = request.form ['name'] 
+        print('NAME', name, unit)
+    except: 
+        name = current_user.username
     
     
     model = Info.ass_mods_dict[unit]
-    entry = model.query.filter_by(username=current_user.username).first() 
+    entry = model.query.filter_by(username=name).first() 
     info = entry.info
     revise = entry.revise 
-    stage = entry.grade   
+    stage = entry.grade 
+    print(name, unit, stage, revise[0:5])  
 
     #print('DATA', type(dataList), dataList)
     return jsonify({'revise' : revise, 'stage' : stage, 'info' : info})
@@ -338,6 +345,29 @@ def published():
             }
 
     return  render_template('instructor/published_work.html', recOBJ=str(json.dumps(recDict)))
+
+
+@app.route("/published_check", methods = ['GET', 'POST'])
+@login_required
+def pCheck():    
+
+    recDict = {} 
+
+    for model in Info.ass_mods_dict:
+        recDict[model] = {}
+        #print(recDict)
+        for entry in Info.ass_mods_dict[model].query.all():   
+            if entry.grade == 5:
+                reviseDict = json.loads(entry.revise)  
+                #print('xxxx', reviseDict)      
+                recDict[str(model)][entry.username] = {
+                    'info' : json.loads(entry.info),               
+                    'publish' : json.loads(entry.publish),
+                    'revise' : json.loads(entry.revise),
+                    'htmltext' : reviseDict['html'],
+                }
+
+    return  render_template('instructor/published_check.html', recOBJ=str(json.dumps(recDict)))
 
 
 @app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
