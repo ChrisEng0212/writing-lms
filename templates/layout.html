@@ -25,7 +25,7 @@
                       <a class="navbar-brand ml-8" href="/">{{headTitle}}</a>
                       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" 
                       aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span> <!--makes nav icon appear-->
+                        <span class="navbar-toggler-icon" style="color:white"></span> <!--makes nav icon appear-->
                       </button>
                       <div class="collapse navbar-collapse" id="navbarToggle" data-toggle="collapse" data-target=".navbar-collapse.show">
                         <div class="navbar-nav mr-auto">
@@ -39,6 +39,7 @@
                         <div class="navbar-nav mr-auto">
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('controls') }}", target="_blank">Controls</a>                                   
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('dashboard') }}", target="_blank">Dashboard</a>                                   
+                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck') }}", target="_blank">Publish_Check</a>                                   
                         </div>
                                                                        
                         {% endif %}      
