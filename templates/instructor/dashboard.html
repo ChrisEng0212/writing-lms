@@ -4,6 +4,35 @@
 
 <div id="vue-app"> 
 
+<div class="list-section">  
+    <button class="btn" @click="showEffort=!showEffort"> EFFORT </button>
+
+        <legend class="border-bottom mb-4">Performance</legend> 
+        <div  v-if="showEffort" style="overflow-x:auto;width:80%">
+            <table class="table table-sm">
+                <thead>
+                    <tr>              
+                    <th scope="col" >Name</th>  
+                    <th scope="col" >1</th>                       
+                    <th scope="col" >2</th>  
+                    <th scope="col" >3</th>  
+                    <th scope="col" >4</th>  
+                    </tr>
+                </thead> 
+                
+                <tbody>
+                    <template v-for="(effort, user) in effortOBJ">             
+                        <tr>              
+                        <td> [[ user ]] </td>
+                        <td v-for="stage in effort"> <span class="unit-span" :style="stageStyle[stage]"> &emsp;[[ stage ]]&emsp; </span> </td>  
+                        </tr>  
+                    </template>                 
+                </tbody> 
+            </table>  
+
+        </div> 
+</div>
+
 <div class="list-section">    
 <legend class="border-bottom mb-4">Dashboard</legend> 
 
@@ -72,8 +101,27 @@
 
 
 let jString = document.getElementById('recs').innerHTML
-console.log(jString)
 const recOBJ = JSON.parse(jString)
+
+effortOBJ = {}
+
+for (var topic in recOBJ){
+    for (var student in recOBJ[topic]){
+        if (effortOBJ[student]) {
+            effortOBJ[student][topic] = recOBJ[topic][student]['info']['stage']
+        }
+        else{
+           effortOBJ[student] = {
+               '01' : 0,
+               '02' : 0,
+               '03' : 0,
+               '04' : 0
+           }
+           effortOBJ[student][topic] = recOBJ[topic][student]['info']['stage']
+        }
+    }    
+}
+console.log('effort', effortOBJ);
 
 console.log(recOBJ)
  
@@ -83,6 +131,8 @@ let vue = new Vue({
     delimiters: ['[[', ']]'],      
     data: {
         recOBJ : recOBJ,
+        effortOBJ : effortOBJ,
+        showEffort : false,
         show : {
             '01' : false, 
             '02' : false, 
@@ -97,7 +147,7 @@ let vue = new Vue({
             2 : {color: 'limegreen'}, 
             3 : {color: 'orange'}, 
             4 : {color: 'cyan'}, 
-            5 : {background: 'blue'}, 
+            5 : {color: 'white', background: 'blue'}, 
                             
         },
         
