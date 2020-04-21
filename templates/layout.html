@@ -40,8 +40,12 @@
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('controls') }}", target="_blank">Controls</a>                                   
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('dashboard') }}", target="_blank">Dashboard</a>                                   
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck') }}", target="_blank">Publish_Check</a>                                   
-                        </div>
-                                                                       
+                        </div>                                                                       
+                        {% endif %}      
+                        {% if current_user.studentID == '999999999' %}
+                        <div class="navbar-nav mr-auto">
+                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck') }}", target="_blank">Publish_Check</a>                                   
+                        </div>                                                                       
                         {% endif %}      
                         {% if current_user.is_authenticated %}
                         <div class="navbar-nav">
