@@ -78,6 +78,7 @@ function startVue(newPlan, info, draft){
             very : true, 
             also : true, 
             let  : true, 
+            everyone  : true, 
             'no matter' : true, 
             there : true, 
             commas : true, 
@@ -87,6 +88,7 @@ function startVue(newPlan, info, draft){
         },
         slides : {
             very : "https://docs.google.com/presentation/d/e/2PACX-1vTlkKekrFpLAINvciyYh_KOxRRGSzikZN27pPoqijHQKlQhbKL0DQzlH6uUx5P862Y6i7Gn1qUASWo2/embed", 
+            everyone : "https://docs.google.com/presentation/d/e/2PACX-1vRlO8hOUw15yJVSMvlYRY7PYHPCo-G9m8vtK04s0ymu37LvshSYYxcNOXohNt9wNarz4ZVPVmDmvYRa/embed", 
             also : "https://docs.google.com/presentation/d/e/2PACX-1vSaRz0wI_qa8iyIujCJjtEC_M_gJZa7Fw0OLLJbW2_QoQ_yOrezSvn-bvid1m-gR6n1baN1UAptFRFZ/embed", 
             let  : "https://docs.google.com/presentation/d/e/2PACX-1vR7E00mYlONL3h6ZfkYkk0Eyiiz9K2xpSfLnTHMKhqLSCgsEI8tS6lPkIVSqxidm1t1-PT9tIvRkddZ/embed", 
             'no matter' : "https://docs.google.com/presentation/d/e/2PACX-1vQtQUX1hrwY1RwYr229bQcvYgMBOMrfat87pGfWEzxDreQjsBpuCf4rSXokvKehDuE7hNGCloqi2yM9/embed", 
@@ -174,6 +176,7 @@ function startVue(newPlan, info, draft){
 
                 ['no matter' ,  /no matter/i],
                 ['let' ,  /\slet\s/i],  
+                ['everyone' ,  /\severyone\s/i],  
                 //http://www.regular-expressions.info/lookaround.html                           
                 ['although' ,  /lthough/i],
 
@@ -181,7 +184,12 @@ function startVue(newPlan, info, draft){
             
             for (var fb in feedback) {
                 if (new_string.match(feedback[fb][1])){
-                    this.control[idx].push(feedback[fb][0])
+                    if (this.control[idx].includes(feedback[fb][0]) ){
+                        console.log('pass');
+                    }
+                    else{
+                        this.control[idx].push(feedback[fb][0])
+                    }
                 }                      
             }
             
