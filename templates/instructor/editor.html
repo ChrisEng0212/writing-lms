@@ -17,6 +17,7 @@
     <button type="button" class="btn btn-success" id="springgreen" onclick="highlight('hiliteColor', this.id)">Green (prnt)</button>
     <button type="button" class="btn btn-info" id="cyan" onclick="highlight('hiliteColor', this.id)">Blue (alt)</button>
     <button type="button" class="btn btn-danger" id="pink" onclick="highlight('hiliteColor', this.id)">Red (caps)</button>
+    <button type="button" class="btn btn-secondary" id="orange" onclick="highlight('hiliteColor', this.id)">Orange (alt)</button>
     <button type="button" class="btn btn-light" id="transparent" onclick="highlight('hiliteColor', this.id)">None</button>
     <button type="button" class="btn btn-secondary" id="toggle" onclick="toggleText()">Text</button>
     <button type="button" class="btn btn-secondary" id="toggle" onclick="sendData()">Send</button>
@@ -97,6 +98,11 @@
          //caps
          event.preventDefault();
          document.getElementById("pink").click();
+      }
+      if (event.keyCode === 57) {
+         //caps
+         event.preventDefault();
+         document.getElementById("orange").click();
       }
    })
 
