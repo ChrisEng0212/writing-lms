@@ -23,9 +23,14 @@
                         <h1>[[ work['publish']['title']  ]]</h1>
                         <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-height:200px":src="work['publish']['imageLink']"> 
                       <br> 
-                      <br> 
+                      <br>                       
                       <img class="rounded-circle chat-img" style="display:inline-block" :src="work['info']['image']"> 
                       <span :style="theme(work['info']['theme'])"> Written by [[  work['info']['avatar'] ]] : [[ work['info']['name'] ]]</span>
+                      <br> 
+                      <br> 
+                      <template  v-for="(plan, head) in work['plan']">                      
+                            <span class="unit-span" style="color:{{current_user.theme}}">[[ head ]]</span> [[plan]]</span> <br>   
+                      </template>
                       <br> 
                       <br> 
                     <div style="background:darkslategrey; border-radius:5px; width:100%">

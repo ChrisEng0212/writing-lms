@@ -350,20 +350,28 @@ def published():
 @app.route("/published_check", methods = ['GET', 'POST'])
 @login_required
 def pCheck():    
+    taCheck = ['Chris', 'TA']
 
     recDict = {} 
 
     for model in Info.ass_mods_dict:
         recDict[model] = {}
         #print(recDict)
-        for entry in Info.ass_mods_dict[model].query.all():   
-            if entry.grade == 5:
+        for entry in Info.ass_mods_dict[model].query.all():
+            if current_user.username in taCheck:
+                add = True
+            elif current_user.username == entry.username:
+                add = True
+            else:
+                add = False  
+            if entry.grade == 5 and add == True:
                 reviseDict = json.loads(entry.revise)  
                 #print('xxxx', reviseDict)      
                 recDict[str(model)][entry.username] = {
                     'info' : json.loads(entry.info),               
                     'publish' : json.loads(entry.publish),
                     'revise' : json.loads(entry.revise),
+                    'plan' : json.loads(entry.plan),
                     'htmltext' : reviseDict['html'],
                 }
 
