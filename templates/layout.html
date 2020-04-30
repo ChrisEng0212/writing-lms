@@ -39,12 +39,12 @@
                         <div class="navbar-nav mr-auto">
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('controls') }}", target="_blank">Controls</a>                                   
                           <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('dashboard') }}", target="_blank">Dashboard</a>                                   
-                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck') }}", target="_blank">Publish_Check</a>                                   
+                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck', mode='instructor') }}", target="_blank">Publish_Check</a>                                   
                         </div>                                                                       
                         {% endif %}      
                         {% if current_user.studentID == '999999999' %}
                         <div class="navbar-nav mr-auto">
-                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck') }}", target="_blank">Publish_Check</a>                                   
+                          <a class="nav-item nav-link" style="color:{{titleColor}};background:white" href="{{ url_for ('pCheck', mode='instructor') }}", target="_blank">Publish_Check</a>                                   
                         </div>                                                                       
                         {% endif %}      
                         {% if current_user.is_authenticated %}
@@ -53,7 +53,7 @@
                           <a class="nav-item nav-link" href="{{ url_for ('course') }}">My Course</a>                          
                           <a class="nav-item nav-link" href="{{ url_for ('tips') }}">Writing Tips</a>                          
                           <a class="nav-item nav-link" href="{{ url_for ('published') }}">Published Work</a>                          
-                          <a class="nav-item nav-link" href="{{ url_for ('pCheck') }}" style="background:royalblue">My Revisions</a>     
+                          <a class="nav-item nav-link" href="{{ url_for ('pCheck', mode='student') }}" style="background:royalblue">My Revisions</a>     
                           <a class="nav-item nav-link" href="{{ url_for ('topic_list') }}" style="background:purple">My Work</a>     
                           <a class="nav-item nav-link" href="{{ url_for ('account') }}">My Account</a>                           
                           <a class="nav-item nav-link" href="{{ url_for ('logout') }}">Logout</a>
