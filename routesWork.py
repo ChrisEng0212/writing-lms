@@ -347,9 +347,9 @@ def published():
     return  render_template('instructor/published_work.html', recOBJ=str(json.dumps(recDict)))
 
 
-@app.route("/published_check", methods = ['GET', 'POST'])
+@app.route("/published_check/<string:mode>", methods = ['GET', 'POST'])
 @login_required
-def pCheck():    
+def pCheck(mode):    
     taCheck = ['Chris', 'TA']
 
     recDict = {} 
@@ -366,14 +366,23 @@ def pCheck():
                 add = False  
             if entry.grade == 5 and add == True:
                 reviseDict = json.loads(entry.revise)  
-                #print('xxxx', reviseDict)      
-                recDict[str(model)][entry.username] = {
-                    'info' : json.loads(entry.info),               
-                    'publish' : json.loads(entry.publish),
-                    'revise' : json.loads(entry.revise),
-                    'plan' : json.loads(entry.plan),
-                    'htmltext' : reviseDict['html'],
-                }
+                #print('xxxx', reviseDict)   
+                if mode == 'instructor':    
+                    recDict[str(model)][entry.username] = {
+                        'info' : json.loads(entry.info),               
+                        'publish' : json.loads(entry.publish),
+                        'revise' : json.loads(entry.revise),
+                        'plan' : json.loads(entry.plan),
+                        'htmltext' : reviseDict['html'],
+                    }
+                elif mode == 'student' and entry.username == current_user.username:    
+                    recDict[str(model)][entry.username] = {
+                        'info' : json.loads(entry.info),               
+                        'publish' : json.loads(entry.publish),
+                        'revise' : json.loads(entry.revise),
+                        'plan' : json.loads(entry.plan),
+                        'htmltext' : reviseDict['html'],
+                    }
 
     return  render_template('instructor/published_check.html', recOBJ=str(json.dumps(recDict)))
 
