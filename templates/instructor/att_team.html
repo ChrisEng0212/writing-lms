@@ -86,16 +86,17 @@
 <button type="button" class="btn btn-lg" style="background:{{titleColor}}; color:white"  disabled >Team: {{fields.teamnumber}}</button>	
 </br>
 </br>
-
+    
     <h5>Your Team Members:</h5>
 
     {% for user in users %}
     <h3><img class="rounded-circle chat-img" src="{{users[user][1]}}"> {{users[user][0]}}</h3>
     {% endfor %}
 
-    <h3 style="background:white"> <a href="{{document}}", target="_blank"> Team Work Document </a> </h3>
+    
+    <h3 style="background:white;display:none"> <a href="{{document}}", target="_blank"> Team Work Document </a> </h3>
     <br> 
-    <h3 style="background:pink"> <a href="{{video}}", target="_blank"> Live Video </a> </h3>
+    <h3 style="background:pink;display:none"> <a href="{{video}}", target="_blank"> Live Video </a> </h3>
 
 
 </br>
