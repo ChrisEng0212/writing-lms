@@ -114,6 +114,18 @@ class A06A (BaseAss):
     id = db.Column(db.Integer, primary_key=True)
 modDictAss['06'] = A06A
 
+class A07A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['07'] = A07A
+
+class A08A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['08'] = A08A
+
+class A09A (BaseAss):
+    id = db.Column(db.Integer, primary_key=True)
+modDictAss['09'] = A09A
+
 
 
 ##############################3
