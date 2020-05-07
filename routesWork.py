@@ -313,19 +313,23 @@ def dashboard():
     if current_user.id != 1:
         return redirect(url_for('home'))
 
+
+    #models_list = ['01', '02', '03', '04']
+    models_list = ['05', '06', '07', '08', '09']
     recDict = {} 
 
-    for model in Info.ass_mods_dict:
-        recDict[model] = {}
+    for model in Info.ass_mods_dict:        
         #print(recDict)
-        for entry in Info.ass_mods_dict[model].query.all():           
-            recDict[str(model)][entry.username] = {
-                'info' : json.loads(entry.info),
-                'plan' : json.loads(entry.plan),                 
-                'draft' : json.loads(entry.draft),
-                'revise' : json.loads(entry.revise),
-                'publish' : json.loads(entry.publish),
-            }
+        if str(model) in models_list: 
+            recDict[model] = {}           
+            for entry in Info.ass_mods_dict[model].query.all():           
+                recDict[str(model)][entry.username] = {
+                    'info' : json.loads(entry.info),
+                    'plan' : json.loads(entry.plan),                 
+                    'draft' : json.loads(entry.draft),
+                    'revise' : json.loads(entry.revise),
+                    'publish' : json.loads(entry.publish),
+                }
 
     return  render_template('instructor/dashboard.html', recOBJ=str(json.dumps(recDict)))
 
@@ -364,7 +368,7 @@ def pCheck(mode):
                 add = True
             else:
                 add = False  
-            if entry.grade == 5 and add == True:
+            if entry.grade == 5 and add == True and int(model) > 4: # check models after topic 4
                 reviseDict = json.loads(entry.revise)  
                 #print('xxxx', reviseDict)   
                 if mode == 'instructor':    
