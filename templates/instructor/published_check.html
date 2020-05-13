@@ -14,11 +14,11 @@
         <tbody>
             <template v-for="(model, unit) in recOBJ"> 
                <tr>
-               <td> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;[[ unit ]]&emsp;&emsp; </span> </td> 
+               <td @click="showUnit(unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;[[ unit ]]&emsp;&emsp; </span> </td> 
                            
                </tr> 
 
-               <template v-for="(work, student) in model"> 
+               <template v-if="show[unit]" v-for="(work, student) in model"> 
                     <div v-if="work['info']['stage'] == 5">
                         <h1>[[ work['publish']['title']  ]]</h1>
                         <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-height:200px":src="work['publish']['imageLink']"> 
@@ -71,24 +71,28 @@ let instructor = document.getElementById('instructor').innerHTML
 const recOBJ = JSON.parse(jString)
 
 console.log('recOBJ', recOBJ)
-console.log('instructor mode', instructor)
+
 
 var htmlOBJ = {}
 
-if (instructor == 'instructor'){
+if (instructor.includes('ins')){
     var topic_start = 5
+    var control = 5
+    console.log('instructor mode', instructor, topic_start)
 }
 else {
     var topic_start = 1
+    var control = 1
+    console.log('instructor mode', instructor, topic_start)
 }
 
 var count = 1
 for (var rec in recOBJ){
     
-
+    console.log('recPre', parseInt(rec), topic_start);
     // controls when to start adding topics in instructor mode        
-    if (parseInt (rec) >= topic_start){
-        console.log('recPre', rec); 
+    if (parseInt(rec) >= topic_start){
+        console.log('recPost', rec, parseInt(rec)); 
         htmlOBJ[rec] = {}
     
         for (var name in recOBJ[rec]){ 
@@ -116,7 +120,7 @@ let studentHTML = {
 
 var reviseCount = 1
 
-var control = 1
+
 getRevise(control)
 function getRevise(control){
             controller = {

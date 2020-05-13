@@ -15,8 +15,7 @@
             <template v-for="(model, unit) in recOBJ"> 
                <tr>
                <td @click="showUnit(unit)"> <span class="unit-span" style="color:{{current_user.theme}}"> &emsp;&emsp;[[ unit ]]&emsp;&emsp; </span> </td> 
-                           
-               </tr> 
+                </tr> 
 
                <template v-if="show[unit]" v-for="(work, student) in model"> 
                     <div v-if="work['info']['stage'] == 5">
