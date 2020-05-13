@@ -351,6 +351,33 @@ def published():
     return  render_template('instructor/published_work.html', recOBJ=str(json.dumps(recDict)))
 
 
+
+@app.route("/published_check", methods = ['POST'])
+@login_required
+def publish_API(): 
+
+    recDict = {} 
+
+    for model in Info.ass_mods_dict:
+        recDict[model] = {}
+        #print(recDict)
+        for entry in Info.ass_mods_dict[model].query.all():            
+            if entry.grade == 5 and int(model) > 4: # check models after topic 4
+                reviseDict = json.loads(entry.revise)  
+                #print('xxxx', reviseDict) 
+                recDict[str(model)][entry.username] = {
+                    'info' : json.loads(entry.info),               
+                    'publish' : json.loads(entry.publish),
+                    'revise' : json.loads(entry.revise),
+                    'plan' : json.loads(entry.plan),
+                    'htmltext' : reviseDict['html'],
+                }                
+
+    return jsonify({'revise' : revise, 'stage' : stage, 'info' : info})
+
+
+
+
 @app.route("/published_check/<string:mode>", methods = ['GET', 'POST'])
 @login_required
 def pCheck(mode):    
@@ -368,27 +395,19 @@ def pCheck(mode):
                 add = True
             else:
                 add = False  
-            if entry.grade == 5 and add == True and int(model) > 4: # check models after topic 4
+            if entry.grade == 5 and add == True: # and int(model) > 4 -- check models after topic 4
                 reviseDict = json.loads(entry.revise)  
                 #print('xxxx', reviseDict)   
-                if mode == 'instructor':    
-                    recDict[str(model)][entry.username] = {
-                        'info' : json.loads(entry.info),               
-                        'publish' : json.loads(entry.publish),
-                        'revise' : json.loads(entry.revise),
-                        'plan' : json.loads(entry.plan),
-                        'htmltext' : reviseDict['html'],
-                    }
-                elif mode == 'student' and entry.username == current_user.username:    
-                    recDict[str(model)][entry.username] = {
-                        'info' : json.loads(entry.info),               
-                        'publish' : json.loads(entry.publish),
-                        'revise' : json.loads(entry.revise),
-                        'plan' : json.loads(entry.plan),
-                        'htmltext' : reviseDict['html'],
-                    }
+                recDict[str(model)][entry.username] = {
+                    'info' : json.loads(entry.info),               
+                    'publish' : json.loads(entry.publish),
+                    'revise' : json.loads(entry.revise),
+                    'plan' : json.loads(entry.plan),
+                    'htmltext' : reviseDict['html'],
+                }
+                
 
-    return  render_template('instructor/published_check.html', recOBJ=str(json.dumps(recDict)))
+    return  render_template('instructor/published_check.html', instructor=mode, recOBJ=str(json.dumps(recDict)))
 
 
 @app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
