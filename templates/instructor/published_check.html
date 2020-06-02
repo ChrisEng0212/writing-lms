@@ -18,7 +18,7 @@
                            
                </tr> 
 
-               <template v-if="show[unit]" v-for="(work, student) in model"> 
+               <template v-if="true" v-for="(work, student) in model"> 
                     <div v-if="work['info']['stage'] == 5">
                         <h1>[[ work['publish']['title']  ]]</h1>
                         <img class="rounded img-fluid" id="final_image" alt="No file yet" style="max-height:200px":src="work['publish']['imageLink']"> 
@@ -76,8 +76,8 @@ console.log('recOBJ', recOBJ)
 var htmlOBJ = {}
 
 if (instructor.includes('ins')){
-    var topic_start = 5
-    var control = 5
+    var topic_start = 1
+    var control = 1
     console.log('instructor mode', instructor, topic_start)
 }
 else {
@@ -191,6 +191,8 @@ let vue = new Vue({
             '04' : false, 
             '05' : false,           
             '06' : false,           
+            '07' : false,           
+            '08' : false,           
             '09' : false   
         },
         studentHTML : studentHTML, 
