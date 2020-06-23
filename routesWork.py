@@ -383,6 +383,7 @@ def publish_API():
 def pCheck(mode):    
     taCheck = ['Chris', 'TA']
 
+    recCount = 0
     recDict = {} 
 
     for model in Info.ass_mods_dict:
@@ -405,9 +406,10 @@ def pCheck(mode):
                     'plan' : json.loads(entry.plan),
                     'htmltext' : reviseDict['html'],
                 }
+                recCount += 1
                 
 
-    return  render_template('instructor/published_check.html', instructor=mode, recOBJ=str(json.dumps(recDict)))
+    return  render_template('instructor/published_check.html', instructor=mode, recCount=recCount, recOBJ=str(json.dumps(recDict)))
 
 
 @app.route("/editor/<string:student>/<string:unit>", methods = ['GET', 'POST'])
